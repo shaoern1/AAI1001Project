@@ -186,7 +186,116 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="data-souces" class="level1">
 <h1>Data souces</h1>
-<p>![Figure 2: ] # Data cleaning and transformation Outline the steps you will take for data cleaning and transformation</p>
+<p>For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023.</p>
+<section id="importing-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="importing-dataset">Importing dataset</h2>
+<p>We will be importing the dataset using the <code>readxl</code> package. The dataset will be stored in a data frame for further analysis and visualization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"DataForTable2.1.xls"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-cleaning-and-transformation" class="level2">
+<h2 class="anchored" data-anchor-id="data-cleaning-and-transformation">Data cleaning and transformation</h2>
+<p>As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from ” ” to “_” will be done for future convience sake.</p>
+<section id="delimiter-change" class="level3">
+<h3 class="anchored" data-anchor-id="delimiter-change">Delimiter change</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  Country_name  year Life_Ladder Log_GDP_per_capita Social_support
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
+1 Afghanistan   2008        3.72               7.35          0.451
+2 Afghanistan   2009        4.40               7.51          0.552
+3 Afghanistan   2010        4.76               7.61          0.539
+4 Afghanistan   2011        3.83               7.58          0.521
+5 Afghanistan   2012        3.78               7.66          0.521
+6 Afghanistan   2013        3.57               7.68          0.484
+# ℹ 6 more variables: Healthy_life_expectancy_at_birth &lt;dbl&gt;,
+#   Freedom_to_make_life_choices &lt;dbl&gt;, Generosity &lt;dbl&gt;,
+#   Perceptions_of_corruption &lt;dbl&gt;, Positive_affect &lt;dbl&gt;,
+#   Negative_affect &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="filter-data-for-years-2021---2023" class="level3">
+<h3 class="anchored" data-anchor-id="filter-data-for-years-2021---2023">Filter data for years 2021 - 2023</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  Country_name  year Life_Ladder Log_GDP_per_capita Social_support
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
+1 Afghanistan   2021        2.44               7.32          0.454
+2 Afghanistan   2022        1.28              NA             0.228
+3 Afghanistan   2023        1.45              NA             0.368
+4 Albania       2021        5.26               9.59          0.702
+5 Albania       2022        5.21               9.65          0.724
+6 Albania       2023        5.44               9.69          0.691
+# ℹ 6 more variables: Healthy_life_expectancy_at_birth &lt;dbl&gt;,
+#   Freedom_to_make_life_choices &lt;dbl&gt;, Generosity &lt;dbl&gt;,
+#   Perceptions_of_corruption &lt;dbl&gt;, Positive_affect &lt;dbl&gt;,
+#   Negative_affect &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="filling-in-empty-data" class="level3">
+<h3 class="anchored" data-anchor-id="filling-in-empty-data">Filling in empty data</h3>
+<p>We will be getting the mean of exisiting data for each country to fill in any empty data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country_name) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(., <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+# Groups:   Country_name [2]
+  Country_name  year Life_Ladder Log_GDP_per_capita Social_support
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
+1 Afghanistan   2021        2.44               7.32          0.454
+2 Afghanistan   2022        1.28               7.32          0.228
+3 Afghanistan   2023        1.45               7.32          0.368
+4 Albania       2021        5.26               9.59          0.702
+5 Albania       2022        5.21               9.65          0.724
+6 Albania       2023        5.44               9.69          0.691
+# ℹ 6 more variables: Healthy_life_expectancy_at_birth &lt;dbl&gt;,
+#   Freedom_to_make_life_choices &lt;dbl&gt;, Generosity &lt;dbl&gt;,
+#   Perceptions_of_corruption &lt;dbl&gt;, Positive_affect &lt;dbl&gt;,
+#   Negative_affect &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+<section id="dropping-missing-data" class="level3">
+<h3 class="anchored" data-anchor-id="dropping-missing-data">Dropping missing data</h3>
+<p>We will drop any rows with missing data to ensure the data is clean and ready for analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+# Groups:   Country_name [2]
+  Country_name  year Life_Ladder Log_GDP_per_capita Social_support
+  &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;              &lt;dbl&gt;          &lt;dbl&gt;
+1 Afghanistan   2021        2.44               7.32          0.454
+2 Afghanistan   2022        1.28               7.32          0.228
+3 Afghanistan   2023        1.45               7.32          0.368
+4 Albania       2021        5.26               9.59          0.702
+5 Albania       2022        5.21               9.65          0.724
+6 Albania       2023        5.44               9.69          0.691
+# ℹ 6 more variables: Healthy_life_expectancy_at_birth &lt;dbl&gt;,
+#   Freedom_to_make_life_choices &lt;dbl&gt;, Generosity &lt;dbl&gt;,
+#   Perceptions_of_corruption &lt;dbl&gt;, Positive_affect &lt;dbl&gt;,
+#   Negative_affect &lt;dbl&gt;</code></pre>
+</div>
+</div>
+</section>
+</section>
 </section>
 
 </main>
