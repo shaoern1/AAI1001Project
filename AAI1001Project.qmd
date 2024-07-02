@@ -67,6 +67,52 @@ We will create an interactive data visualisation that allows users to explore th
 
 
 # Data souces
-![Figure 2: ]
-# Data cleaning and transformation
-Outline the steps you will take for data cleaning and transformation
+
+For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023. 
+
+## Importing dataset
+We will be importing the dataset using the `readxl` package. The dataset will be stored in a data frame for further analysis and visualization.
+
+```{r}
+data<- read_excel("DataForTable2.1.xls")
+```
+
+## Data cleaning and transformation
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "_" will be done for future convience sake.
+
+### Delimiter change
+
+```{r}
+data <- data %>%
+  rename_with(~str_replace_all(., " ", "_"))
+head(data)
+```
+
+### Filter data for years 2021 - 2023
+```{r}
+data <- data %>%
+  filter(year %in% c(2021, 2022, 2023))
+head(data)
+```
+
+### Filling in empty data
+We will be getting the mean of exisiting data for each country to fill in any empty data.
+
+```{r}
+data <- data %>%
+  group_by(Country_name) %>%
+  mutate(across(everything(), ~replace_na(., mean(., na.rm = TRUE))))
+
+head(data)
+```
+
+### Dropping missing data
+We will drop any rows with missing data to ensure the data is clean and ready for analysis.
+
+```{r}
+data <- data %>%
+  drop_na()
+head(data)
+```
+
+
