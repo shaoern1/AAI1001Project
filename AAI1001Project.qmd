@@ -35,9 +35,9 @@ Summarize the team’s critical analysis of the strengths and weaknesses of the 
 
 ## Strengths
 
-As you select between the different tabs at the top, the dots on the scatter chart will shift around, allowing viewers to easily see how each factor could potentially affect the level on the happiness index.
+As you select between the different tabs at the top, the dots on the scatter chart will shift according to the factor and allow viewers to easily see how it could potentially affects the happiness index for each country.
 
-Although it is messy, each dot is also separated based on the continent that each country resides in. It may still not be the most efficient way to search for a specific country but it does help to narrow down the list of countries that are displayed. It also helps to show roughly which continents are thriving more than others in the happiness department.
+The dots on the visualization are separated based on the continent they reside in and the color helps to differientiate it clearly for the user to see. Each dot represents a country, so when we hover over them we are able to see the country name and their happiness ranking. Additionally on the side there is a legend that allows us to filter according to the continent, making only the countries in that continent visible, allowing users to see clearly how well each country in that continent is doing on the happiness index for certain factors.
 
 ## Weaknesses
 
@@ -67,9 +67,10 @@ We will create an interactive data visualisation that allows users to explore th
 
 # Data souces
 
-For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023. 
+For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023.
 
 ## Importing dataset
+
 We will be importing the dataset using the `readxl` package. The dataset will be stored in a data frame for further analysis and visualization.
 
 ```{r}
@@ -77,7 +78,8 @@ data<- read_excel("DataForTable2.1.xls")
 ```
 
 ## Data cleaning and transformation
-As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "_" will be done for future convience sake.
+
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "\_" will be done for future convience sake.
 
 ### Delimiter change
 
@@ -88,6 +90,7 @@ head(data)
 ```
 
 ### Filter data for years 2021 - 2023
+
 ```{r}
 data <- data %>%
   filter(year %in% c(2021, 2022, 2023))
@@ -95,6 +98,7 @@ head(data)
 ```
 
 ### Filling in empty data
+
 We will be getting the mean of exisiting data for each country to fill in any empty data.
 
 ```{r}
@@ -106,6 +110,7 @@ head(data)
 ```
 
 ### Dropping missing data
+
 We will drop any rows with missing data to ensure the data is clean and ready for analysis.
 
 ```{r}
