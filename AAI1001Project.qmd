@@ -1,0 +1,64 @@
+---
+title: "AAI1001 Team Project Proposal"
+format: html
+editor: visual
+author: "Toh Shao Ern, Kuick Si Qi, Wong Khin Foong, Sebestian Fernandez, Yu Haotong"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    number_sections: true
+    section_depth: 2
+---
+For this document, we will be using the following packages:
+```{r}
+library(readxl)
+library(dplyr)
+library(tidyverse)
+```
+
+1st refer:
+Where ot come from 
+2nd refer: 
+where you data is coming from
+
+# Original Data Visualisation on Gutzy.asia
+The data visualisation we have chosen is from Gutzy Asia (Figure 1), which shows the ranking of life evaluation of age group from 2021 to 2023. The data visualisation is a table that presents the life evaluation scores of different age groups across three years. The table is color-coded to highlight the differences in scores, making it easier for users to identify trends and patterns in the data.
+
+We have chosen the data visualisation from Gutzy Asia, which shows the ranking of life evaluation of age group from 2021 to 2023. They have chosen to use a table to present the data, which is a simple and effective way to compare the life evaluation scores of different age groups across three years. The data visualisation is significant because it highlights the differences in life evaluation scores across different age groups and provides insights into how people's perceptions of their lives change as they age.
+
+![Figure 1: Gutzy.asia's data visualisation of Ranking of life evaluation of age group, 2021 - 2023](Images/datavisualisation.jpeg)
+
+
+# Critical Assessment and Strength & Weaknesses
+Summarize the team’s critical analysis of the strengths and weaknesses of the original visualization.
+Describe any improvements you intend to incorporate.
+
+## Strengths
+For users who are interested in getting a quick answer which, the table format is easy to read and understand. The data is presented in a clear and concise manner, making it easy to compare the life evaluation scores of different age groups across three years. The use of color coding also helps to highlight the differences in scores, making it easier for users to identify trends and patterns in the data.
+
+## Weaknesses
+As the data only shows the ranking of life evaluation of age group from 2021 to 2023, it is difficult to see the actual scores of each age group. This makes it hard for users to understand the magnitude of the differences in scores between age groups. The table format also makes it difficult to see the trends and patterns in the data, as users have to scan through the entire table to identify changes in scores over time.
+ 
+Furthermore, for the label for "Happiest" and "Least Happy" is also not quantified, and does not show the disparity of the scores between the age groups.
+
+Lastly, the data has very extensive amounts of data. It is hard to see the trends and patterns in the data, as users have to scan through the entire table to identify changes in scores over time.
+
+# Proposed Improvements
+To address the weaknesses of the original data visualisation, we propose the following improvements:
+
+## Using of scores 
+Instead of only showing ranking, we intend to include scores of each age group in the data visualisation. This will provide users with a better understanding of the magnitude of the differences in scores between age groups and allow them to see the actual scores of each age group. By including scores, users will be able to compare the life evaluation scores of different age groups more accurately and make more informed decisions based on the data.
+
+## Lineplots
+To further give our users a better understanding of the trends and patterns in the data, we will use line plots to visualise the data of each country. Line plots are effective in showing trends over time and will allow users to see how the life evaluation scores of different age groups change from 2021 to 2023. By using line plots, users will be able to identify patterns in the data more easily and make more informed decisions based on the data.
+
+## Interactive Data Visualisation
+
+We will create an interactive data visualisation that allows users to explore the data in more detail. Users will be able to hover over the data points to see the actual scores of each age group and compare the scores across different years. The interactive data visualisation will also include filters that allow users to focus on specific age groups or years, making it easier to identify trends and patterns in the data.
+
+
+# Data souces
+![Figure 2: ]
+# Data cleaning and transformation
+Outline the steps you will take for data cleaning and transformation
