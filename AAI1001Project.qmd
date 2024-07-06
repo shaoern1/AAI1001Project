@@ -40,7 +40,7 @@ Further more the countries are also labeled with their respective happiness scor
 
 In addition to this they also provide pointers to the countries with the highest and lowest happiness scores in their respective region, such as the pointer on Finland indicating "MOST HAPPY: EUROPE" on the contrary would be pointer to Ukraine with the label "LEAST HAPPY: EUROPE". This provides a quick overview of the happiness levels in different regions of the world.
 
-The news media also provides a zoomed in version of the world map [Figure 2](#fig2) for a more detailed view of the happiness scores per region, with the countries incosistently labeled with their respective happiness scores and country name. This allows readers to focus on a specific region and compare the happiness scores of different countries within that region. In addition to this they also provide a linear scale of the happiness scores of each country in the respective region at the bottom of the map in [Figure 2](#2).
+The news media also provides a zoomed in version of the world map [Figure 2](#fig2) for a more detailed view of the happiness scores per region, with the countries inconsistently labeled with their respective happiness scores and country name. This allows readers to focus on a specific region and compare the happiness scores of different countries within that region. In addition to this they also provide a linear scale of the happiness scores of each country in the respective region at the bottom of the map in [Figure 2](#2).
 
 Overall, the original visual is effective in communicating to the readers of the Happiness Levels across the countries. However, there are some shortcomings the team has identified:
 
@@ -50,7 +50,7 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 1.  **Lack of Interactivity**: The static nature of the world map limits the audience's ability to interact with the data and explore specific countries or regions in more detail. An interactive visualization would allow users to hover over countries to see detailed information and compare happiness scores across different years.
 
-2.  **Limited Context**: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tooltips that explain the key variables influencing happiness levels would enhance the audience's understanding of the data.
+2.  **Limited Context**: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tool-tips that explain the key variables influencing happiness levels would enhance the audience's understanding of the data.
 
 ![Inconsistent Labeling example](Images/inconsistent_labeling_weakness.png){#Fig3 width="200"}
 
@@ -66,17 +66,17 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
 
-![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4} 7. **Linear Scale**: The linear scale at the bottom of the region map is poorly visualised and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4} 7. **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
 
 8.  **Incorrect Date for the Visualization**: The visualization is titled "A Map of Global Happiness by Country in 2024" but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
 
 # Proposed Improvements
 
-To address the weaknesses of the original data visualisation, we propose the following improvements:
+To address the weaknesses of the original data visualization, we propose the following improvements:
 
 1.  **Interactive Data Visualization**: Develop an interactive data visualization that allows users to explore the data in more detail. Users should be able to hover over countries to see detailed information, compare happiness scores across different years, and filter the data based on specific criteria such as region or happiness score range.
 
-2.  **Consistent Labeling and Annotations**: Standardize the labeling format for countries to ensure consistency and readability. Include annotations or tooltips that provide additional context on the factors influencing happiness scores, helping users understand the data better.
+2.  **Consistent Labeling and Annotations**: Standardize the labeling format for countries to ensure consistency and readability. Include annotations or tool-tips that provide additional context on the factors influencing happiness scores, helping users understand the data better.
 
 3.  **Historical Comparison and Trend Analysis**: Incorporate data from previous years and implement a time slider feature that enables users to track changes in happiness levels over time. This feature will allow users to identify trends, patterns, and outliers in the data and gain insights into the factors driving these changes.
 
@@ -112,10 +112,93 @@ For our project, we will be using the World Happiness Report (WHR) dataset, whic
 We will be importing the dataset using the `readxl` package. The dataset will be stored in a data frame for further analysis and visualization.
 
 ```{r}
-data<- read_excel("DataForTable2.1.xls")
+data <- read_excel("DataForTable2.1.xls")
+data
 ```
 
+### Data Understanding
+
+```{r}
+summary(data)
+```
+
+From this, we can see that there are 11 variables in the dataset. The variables include Country name, year, Life Ladde, Log GDP per capita, Social support, Healthy life expectancy at birth, Freedom to make life choices, Generosity, Perceptions of corruption, Positive affect, Negative affect. These variables will be used to create visualizations that provide insights into the happiness levels of countries worldwide and the factors influencing these levels.
+
+#### Breakdown of the columns:
+1. **Country name**: This is a categorical variable representing the name of the country. It is stored as a character class. The dataset encompasses observations from multiple countries around the world.
+
+2. **Year**: This variable represents the year in which the happiness data was collected, ranging from 2005 to 2023. It indicates the temporal aspect of the data, allowing for trend analysis over the years.
+
+3. **Life Ladder**: Often referred to as the happiness score, this variable measures the subjective well-being and overall life satisfaction of people in each country. The scores range from a minimum of 1.281 to a maximum of 8.019, suggesting a wide variance in perceived happiness.
+
+4. **Log GDP per capita**: This is a logarithmic transformation of GDP per capita, reflecting the economic prosperity of a country normalized on a log scale to reduce skewness and enhance interpretability. The values range from 5.527 to 11.676, with some missing values, indicating varied economic statuses across the dataset.
+
+5. **Social support**: Measured on a scale from 0 to 1, this variable quantifies the extent of social support perceived by individuals in their country. Higher values indicate better perceived social support, with a maximum value of 0.9873 suggesting strong social networks in some areas.
+
+6. **Healthy life expectancy at birth**: This indicator provides the number of years a newborn is expected to live in "good" health, based on current trends in health and mortality. It varies significantly across countries, with values ranging from 6.72 to 74.60 years, reflecting disparities in healthcare and living conditions.
+
+7. **Freedom to make life choices**: This variable measures the perceived freedom of individuals in making life choices, again ranging from 0 to 1. Countries with higher values are considered to have greater personal freedoms.
+
+8. **Generosity**: This reflects the average degree of generosity of a country's residents, with a range from -0.33955 to 0.69957. Negative values might indicate less frequent expressions of generosity compared to the baseline, whereas positive values indicate the opposite.
+
+9. **Perceptions of corruption**: This measures the general perception of corruption within political institutions on a scale from 0 to 1, with higher values indicating worse corruption. This variable helps in understanding trust in governmental organizations.
+
+10. **Positive affect**: This represents the prevalence of positive emotions in the population, measured on a scale from 0 to 1. Higher values suggest that people frequently experience positive emotions such as joy and pride.
+
+11. **Negative affect**: Conversely, this measures the prevalence of negative emotions, also on a scale from 0 to 1. Higher values indicate that negative emotions such as sadness and anger are more common.
+
+#### Summary Statistics Overview:
+- Each variable has summary statistics provided, such as the minimum, first quartile (25th percentile), median (50th percentile), mean, third quartile (75th percentile), and maximum values. 
+- NA values are noted for several variables, indicating missing data points that may need to be addressed during data preprocessing.
+- The presence of both mean and median values helps identify skewness in the data distribution. For example, if the mean is significantly higher than the median, it suggests a right-skewed distribution.
+
+#### Unrepresented Countries
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the total list of Countries in the world"
+
+countries <- c(
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
+  "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", 
+  "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", 
+  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", 
+  "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic",
+  "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", 
+  "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", 
+  "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", 
+  "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", 
+  "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", 
+  "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", 
+  "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", 
+  "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", 
+  "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", 
+  "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", 
+  "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", 
+  "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", 
+  "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", 
+  "Pakistan", "Palau", "State of Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", 
+  "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", 
+  "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", 
+  "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", 
+  "Slovenia", "Solomon Islands", "Somaliland region", "South Africa", "South Korea", "South Sudan", 
+  "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan Province of China", 
+  "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", 
+  "Türkiye", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", 
+  "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", 
+  "Yemen", "Zambia", "Zimbabwe"
+)
+length(countries)
+```
+
+```{r}
+missing_countries <- countries[!countries %in% unique(data$"Country name")]
+print(missing_countries)
+```
+We can see that there are 33 countries that are not included in the survey.
+
 ## Data cleaning and transformation
+
 
 As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "\_" will be done for future convinience sake.
 
@@ -137,7 +220,7 @@ head(data)
 
 ### Filling in empty data
 
-We will be getting the mean of exisiting data for each country to fill in any empty data.
+We will be getting the mean of existing data for each country to fill in any empty data.
 
 ```{r}
 data <- data %>%
