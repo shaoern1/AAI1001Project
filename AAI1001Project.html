@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -127,14 +127,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The Global World Map in <a href="#fig1">Figure 1</a> and the region map <a href="#fig2">Figure 2</a> visualizes three variables: country, happiness score, and geographical location. The visualization indicates at the top, the color gradient legend indicating that the countries are color-coded based on their happiness scores, with a spectrum ranging from blue (least happy, score of 1) through pink (average happiness, score of 4) to yellow (happiest, score of 8).</p>
 <p>Further more the countries are also labeled with their respective happiness scores in a bolded text, such as the label “6.5” on Finland, indicating the happiness score of Finland.</p>
 <p>In addition to this they also provide pointers to the countries with the highest and lowest happiness scores in their respective region, such as the pointer on Finland indicating “MOST HAPPY: EUROPE” on the contrary would be pointer to Ukraine with the label “LEAST HAPPY: EUROPE”. This provides a quick overview of the happiness levels in different regions of the world.</p>
-<p>The news media also provides a zoomed in version of the world map <a href="#fig2">Figure 2</a> for a more detailed view of the happiness scores per region, with the countries incosistently labeled with their respective happiness scores and country name. This allows readers to focus on a specific region and compare the happiness scores of different countries within that region. In addition to this they also provide a linear scale of the happiness scores of each country in the respective region at the bottom of the map in <a href="#2">Figure 2</a>.</p>
+<p>The news media also provides a zoomed in version of the world map <a href="#fig2">Figure 2</a> for a more detailed view of the happiness scores per region, with the countries inconsistently labeled with their respective happiness scores and country name. This allows readers to focus on a specific region and compare the happiness scores of different countries within that region. In addition to this they also provide a linear scale of the happiness scores of each country in the respective region at the bottom of the map in <a href="#2">Figure 2</a>.</p>
 <p>Overall, the original visual is effective in communicating to the readers of the Happiness Levels across the countries. However, there are some shortcomings the team has identified:</p>
 <section id="weaknesses" class="level2">
 <h2 class="anchored" data-anchor-id="weaknesses">Weaknesses</h2>
 <p>The original visualization has several weaknesses that limit its effectiveness in conveying the information to the audience. These weaknesses include:</p>
 <ol type="1">
 <li><p><strong>Lack of Interactivity</strong>: The static nature of the world map limits the audience’s ability to interact with the data and explore specific countries or regions in more detail. An interactive visualization would allow users to hover over countries to see detailed information and compare happiness scores across different years.</p></li>
-<li><p><strong>Limited Context</strong>: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tooltips that explain the key variables influencing happiness levels would enhance the audience’s understanding of the data.</p></li>
+<li><p><strong>Limited Context</strong>: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tool-tips that explain the key variables influencing happiness levels would enhance the audience’s understanding of the data.</p></li>
 </ol>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -155,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>Limited Data Insights</strong>: The visualization focuses solely on the happiness scores of countries without providing additional insights or analysis of the data. Including annotations, data summaries, or comparisons with other relevant metrics would enrich the audience’s understanding of the factors influencing happiness levels.</p></li>
 <li><p><strong>Color Blindness</strong>: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.</p></li>
 </ol>
-<p><img src="images/linear_scale_of_happiness_region.png" id="Fig4" class="img-fluid" alt="Figure 3: Linear scale of Happiness score of each country by region"> 7. <strong>Linear Scale</strong>: The linear scale at the bottom of the region map is poorly visualised and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.</p>
+<p><img src="images/linear_scale_of_happiness_region.png" id="Fig4" class="img-fluid" alt="Figure 3: Linear scale of Happiness score of each country by region"> 7. <strong>Linear Scale</strong>: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.</p>
 <ol start="8" type="1">
 <li><strong>Incorrect Date for the Visualization</strong>: The visualization is titled “A Map of Global Happiness by Country in 2024” but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.</li>
 </ol>
@@ -163,10 +163,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="proposed-improvements" class="level1">
 <h1>Proposed Improvements</h1>
-<p>To address the weaknesses of the original data visualisation, we propose the following improvements:</p>
+<p>To address the weaknesses of the original data visualization, we propose the following improvements:</p>
 <ol type="1">
 <li><p><strong>Interactive Data Visualization</strong>: Develop an interactive data visualization that allows users to explore the data in more detail. Users should be able to hover over countries to see detailed information, compare happiness scores across different years, and filter the data based on specific criteria such as region or happiness score range.</p></li>
-<li><p><strong>Consistent Labeling and Annotations</strong>: Standardize the labeling format for countries to ensure consistency and readability. Include annotations or tooltips that provide additional context on the factors influencing happiness scores, helping users understand the data better.</p></li>
+<li><p><strong>Consistent Labeling and Annotations</strong>: Standardize the labeling format for countries to ensure consistency and readability. Include annotations or tool-tips that provide additional context on the factors influencing happiness scores, helping users understand the data better.</p></li>
 <li><p><strong>Historical Comparison and Trend Analysis</strong>: Incorporate data from previous years and implement a time slider feature that enables users to track changes in happiness levels over time. This feature will allow users to identify trends, patterns, and outliers in the data and gain insights into the factors driving these changes.</p></li>
 <li><p><strong>Data Insights and Analysis</strong>: Provide data summaries, comparisons with other relevant metrics, and visualizations that offer insights into the factors influencing happiness levels. Including additional context and analysis will enhance the audience’s understanding of the data and encourage further exploration.</p></li>
 <li><p><strong>User-Friendly Design</strong>: Design the data visualization with a user-friendly interface that is intuitive and easy to navigate. Consider the audience’s needs and preferences when developing the visualization to ensure an engaging and informative user experience.</p></li>
@@ -182,18 +182,171 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="importing-dataset">Importing dataset</h2>
 <p>We will be importing the dataset using the <code>readxl</code> package. The dataset will be stored in a data frame for further analysis and visualization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"DataForTable2.1.xls"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"DataForTable2.1.xls"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2,363 × 11
+   `Country name`  year `Life Ladder` `Log GDP per capita` `Social support`
+   &lt;chr&gt;          &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;            &lt;dbl&gt;
+ 1 Afghanistan     2008          3.72                 7.35            0.451
+ 2 Afghanistan     2009          4.40                 7.51            0.552
+ 3 Afghanistan     2010          4.76                 7.61            0.539
+ 4 Afghanistan     2011          3.83                 7.58            0.521
+ 5 Afghanistan     2012          3.78                 7.66            0.521
+ 6 Afghanistan     2013          3.57                 7.68            0.484
+ 7 Afghanistan     2014          3.13                 7.67            0.526
+ 8 Afghanistan     2015          3.98                 7.65            0.529
+ 9 Afghanistan     2016          4.22                 7.65            0.559
+10 Afghanistan     2017          2.66                 7.65            0.491
+# ℹ 2,353 more rows
+# ℹ 6 more variables: `Healthy life expectancy at birth` &lt;dbl&gt;,
+#   `Freedom to make life choices` &lt;dbl&gt;, Generosity &lt;dbl&gt;,
+#   `Perceptions of corruption` &lt;dbl&gt;, `Positive affect` &lt;dbl&gt;,
+#   `Negative affect` &lt;dbl&gt;</code></pre>
 </div>
+</div>
+<section id="data-understanding" class="level3">
+<h3 class="anchored" data-anchor-id="data-understanding">Data Understanding</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Country name            year       Life Ladder    Log GDP per capita
+ Length:2363        Min.   :2005   Min.   :1.281   Min.   : 5.527    
+ Class :character   1st Qu.:2011   1st Qu.:4.647   1st Qu.: 8.506    
+ Mode  :character   Median :2015   Median :5.449   Median : 9.503    
+                    Mean   :2015   Mean   :5.484   Mean   : 9.400    
+                    3rd Qu.:2019   3rd Qu.:6.324   3rd Qu.:10.393    
+                    Max.   :2023   Max.   :8.019   Max.   :11.676    
+                                                   NA's   :28        
+ Social support   Healthy life expectancy at birth Freedom to make life choices
+ Min.   :0.2282   Min.   : 6.72                    Min.   :0.2283              
+ 1st Qu.:0.7438   1st Qu.:59.20                    1st Qu.:0.6607              
+ Median :0.8344   Median :65.10                    Median :0.7711              
+ Mean   :0.8094   Mean   :63.40                    Mean   :0.7503              
+ 3rd Qu.:0.9038   3rd Qu.:68.55                    3rd Qu.:0.8617              
+ Max.   :0.9873   Max.   :74.60                    Max.   :0.9852              
+ NA's   :13       NA's   :63                       NA's   :36                  
+   Generosity       Perceptions of corruption Positive affect 
+ Min.   :-0.33955   Min.   :0.0352            Min.   :0.1789  
+ 1st Qu.:-0.11194   1st Qu.:0.6868            1st Qu.:0.5720  
+ Median :-0.02161   Median :0.7985            Median :0.6634  
+ Mean   : 0.00010   Mean   :0.7440            Mean   :0.6519  
+ 3rd Qu.: 0.09357   3rd Qu.:0.8676            3rd Qu.:0.7373  
+ Max.   : 0.69957   Max.   :0.9833            Max.   :0.8836  
+ NA's   :81         NA's   :125               NA's   :24      
+ Negative affect  
+ Min.   :0.08274  
+ 1st Qu.:0.20856  
+ Median :0.26217  
+ Mean   :0.27316  
+ 3rd Qu.:0.32621  
+ Max.   :0.70459  
+ NA's   :16       </code></pre>
+</div>
+</div>
+<p>From this, we can see that there are 11 variables in the dataset. The variables include Country name, year, Life Ladde, Log GDP per capita, Social support, Healthy life expectancy at birth, Freedom to make life choices, Generosity, Perceptions of corruption, Positive affect, Negative affect. These variables will be used to create visualizations that provide insights into the happiness levels of countries worldwide and the factors influencing these levels.</p>
+<section id="breakdown-of-the-columns" class="level4">
+<h4 class="anchored" data-anchor-id="breakdown-of-the-columns">Breakdown of the columns:</h4>
+<ol type="1">
+<li><p><strong>Country name</strong>: This is a categorical variable representing the name of the country. It is stored as a character class. The dataset encompasses observations from multiple countries around the world.</p></li>
+<li><p><strong>Year</strong>: This variable represents the year in which the happiness data was collected, ranging from 2005 to 2023. It indicates the temporal aspect of the data, allowing for trend analysis over the years.</p></li>
+<li><p><strong>Life Ladder</strong>: Often referred to as the happiness score, this variable measures the subjective well-being and overall life satisfaction of people in each country. The scores range from a minimum of 1.281 to a maximum of 8.019, suggesting a wide variance in perceived happiness.</p></li>
+<li><p><strong>Log GDP per capita</strong>: This is a logarithmic transformation of GDP per capita, reflecting the economic prosperity of a country normalized on a log scale to reduce skewness and enhance interpretability. The values range from 5.527 to 11.676, with some missing values, indicating varied economic statuses across the dataset.</p></li>
+<li><p><strong>Social support</strong>: Measured on a scale from 0 to 1, this variable quantifies the extent of social support perceived by individuals in their country. Higher values indicate better perceived social support, with a maximum value of 0.9873 suggesting strong social networks in some areas.</p></li>
+<li><p><strong>Healthy life expectancy at birth</strong>: This indicator provides the number of years a newborn is expected to live in “good” health, based on current trends in health and mortality. It varies significantly across countries, with values ranging from 6.72 to 74.60 years, reflecting disparities in healthcare and living conditions.</p></li>
+<li><p><strong>Freedom to make life choices</strong>: This variable measures the perceived freedom of individuals in making life choices, again ranging from 0 to 1. Countries with higher values are considered to have greater personal freedoms.</p></li>
+<li><p><strong>Generosity</strong>: This reflects the average degree of generosity of a country’s residents, with a range from -0.33955 to 0.69957. Negative values might indicate less frequent expressions of generosity compared to the baseline, whereas positive values indicate the opposite.</p></li>
+<li><p><strong>Perceptions of corruption</strong>: This measures the general perception of corruption within political institutions on a scale from 0 to 1, with higher values indicating worse corruption. This variable helps in understanding trust in governmental organizations.</p></li>
+<li><p><strong>Positive affect</strong>: This represents the prevalence of positive emotions in the population, measured on a scale from 0 to 1. Higher values suggest that people frequently experience positive emotions such as joy and pride.</p></li>
+<li><p><strong>Negative affect</strong>: Conversely, this measures the prevalence of negative emotions, also on a scale from 0 to 1. Higher values indicate that negative emotions such as sadness and anger are more common.</p></li>
+</ol>
+</section>
+<section id="summary-statistics-overview" class="level4">
+<h4 class="anchored" data-anchor-id="summary-statistics-overview">Summary Statistics Overview:</h4>
+<ul>
+<li>Each variable has summary statistics provided, such as the minimum, first quartile (25th percentile), median (50th percentile), mean, third quartile (75th percentile), and maximum values.</li>
+<li>NA values are noted for several variables, indicating missing data points that may need to be addressed during data preprocessing.</li>
+<li>The presence of both mean and median values helps identify skewness in the data distribution. For example, if the mean is significantly higher than the median, it suggests a right-skewed distribution.</li>
+</ul>
+</section>
+<section id="unrepresented-countries" class="level4">
+<h4 class="anchored" data-anchor-id="unrepresented-countries">Unrepresented Countries</h4>
+<div class="cell">
+<details class="code-fold">
+<summary>Show the total list of Countries in the world</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Afghanistan"</span>, <span class="st">"Albania"</span>, <span class="st">"Algeria"</span>, <span class="st">"Andorra"</span>, <span class="st">"Angola"</span>, <span class="st">"Antigua and Barbuda"</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Argentina"</span>, <span class="st">"Armenia"</span>, <span class="st">"Australia"</span>, <span class="st">"Austria"</span>, <span class="st">"Azerbaijan"</span>, <span class="st">"Bahamas"</span>, <span class="st">"Bahrain"</span>, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Bangladesh"</span>, <span class="st">"Barbados"</span>, <span class="st">"Belarus"</span>, <span class="st">"Belgium"</span>, <span class="st">"Belize"</span>, <span class="st">"Benin"</span>, <span class="st">"Bhutan"</span>, <span class="st">"Bolivia"</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Bosnia and Herzegovina"</span>, <span class="st">"Botswana"</span>, <span class="st">"Brazil"</span>, <span class="st">"Brunei"</span>, <span class="st">"Bulgaria"</span>, <span class="st">"Burkina Faso"</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Burundi"</span>, <span class="st">"Cabo Verde"</span>, <span class="st">"Cambodia"</span>, <span class="st">"Cameroon"</span>, <span class="st">"Canada"</span>, <span class="st">"Central African Republic"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Chad"</span>, <span class="st">"Chile"</span>, <span class="st">"China"</span>, <span class="st">"Colombia"</span>, <span class="st">"Comoros"</span>, <span class="st">"Congo"</span>, <span class="st">"Costa Rica"</span>, <span class="st">"Croatia"</span>, </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Cuba"</span>, <span class="st">"Cyprus"</span>, <span class="st">"Czechia"</span>, <span class="st">"Denmark"</span>, <span class="st">"Djibouti"</span>, <span class="st">"Dominica"</span>, <span class="st">"Dominican Republic"</span>, </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"East Timor"</span>, <span class="st">"Ecuador"</span>, <span class="st">"Egypt"</span>, <span class="st">"El Salvador"</span>, <span class="st">"Equatorial Guinea"</span>, <span class="st">"Eritrea"</span>, </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Estonia"</span>, <span class="st">"Eswatini"</span>, <span class="st">"Ethiopia"</span>, <span class="st">"Fiji"</span>, <span class="st">"Finland"</span>, <span class="st">"France"</span>, <span class="st">"Gabon"</span>, <span class="st">"Gambia"</span>, </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Georgia"</span>, <span class="st">"Germany"</span>, <span class="st">"Ghana"</span>, <span class="st">"Greece"</span>, <span class="st">"Grenada"</span>, <span class="st">"Guatemala"</span>, <span class="st">"Guinea"</span>, <span class="st">"Guinea-Bissau"</span>, </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Guyana"</span>, <span class="st">"Haiti"</span>, <span class="st">"Honduras"</span>, <span class="st">"Hungary"</span>, <span class="st">"Iceland"</span>, <span class="st">"India"</span>, <span class="st">"Indonesia"</span>, <span class="st">"Iran"</span>, </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Iraq"</span>, <span class="st">"Ireland"</span>, <span class="st">"Israel"</span>, <span class="st">"Italy"</span>, <span class="st">"Jamaica"</span>, <span class="st">"Japan"</span>, <span class="st">"Jordan"</span>, <span class="st">"Kazakhstan"</span>, </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Kenya"</span>, <span class="st">"Kiribati"</span>, <span class="st">"Kuwait"</span>, <span class="st">"Kyrgyzstan"</span>, <span class="st">"Laos"</span>, <span class="st">"Latvia"</span>, <span class="st">"Lebanon"</span>, <span class="st">"Lesotho"</span>, </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Liberia"</span>, <span class="st">"Libya"</span>, <span class="st">"Liechtenstein"</span>, <span class="st">"Lithuania"</span>, <span class="st">"Luxembourg"</span>, <span class="st">"Madagascar"</span>, <span class="st">"Malawi"</span>, </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Malaysia"</span>, <span class="st">"Maldives"</span>, <span class="st">"Mali"</span>, <span class="st">"Malta"</span>, <span class="st">"Marshall Islands"</span>, <span class="st">"Mauritania"</span>, <span class="st">"Mauritius"</span>, </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mexico"</span>, <span class="st">"Micronesia"</span>, <span class="st">"Moldova"</span>, <span class="st">"Monaco"</span>, <span class="st">"Mongolia"</span>, <span class="st">"Montenegro"</span>, <span class="st">"Morocco"</span>, </span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Mozambique"</span>, <span class="st">"Myanmar"</span>, <span class="st">"Namibia"</span>, <span class="st">"Nauru"</span>, <span class="st">"Nepal"</span>, <span class="st">"Netherlands"</span>, <span class="st">"New Zealand"</span>, </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Nicaragua"</span>, <span class="st">"Niger"</span>, <span class="st">"Nigeria"</span>, <span class="st">"North Korea"</span>, <span class="st">"North Macedonia"</span>, <span class="st">"Norway"</span>, <span class="st">"Oman"</span>, </span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Pakistan"</span>, <span class="st">"Palau"</span>, <span class="st">"State of Palestine"</span>, <span class="st">"Panama"</span>, <span class="st">"Papua New Guinea"</span>, <span class="st">"Paraguay"</span>, <span class="st">"Peru"</span>, </span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Philippines"</span>, <span class="st">"Poland"</span>, <span class="st">"Portugal"</span>, <span class="st">"Qatar"</span>, <span class="st">"Romania"</span>, <span class="st">"Russia"</span>, <span class="st">"Rwanda"</span>, <span class="st">"Saint Kitts and Nevis"</span>, </span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Saint Lucia"</span>, <span class="st">"Saint Vincent and the Grenadines"</span>, <span class="st">"Samoa"</span>, <span class="st">"San Marino"</span>, <span class="st">"Sao Tome and Principe"</span>, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Saudi Arabia"</span>, <span class="st">"Senegal"</span>, <span class="st">"Serbia"</span>, <span class="st">"Seychelles"</span>, <span class="st">"Sierra Leone"</span>, <span class="st">"Singapore"</span>, <span class="st">"Slovakia"</span>, </span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Slovenia"</span>, <span class="st">"Solomon Islands"</span>, <span class="st">"Somaliland region"</span>, <span class="st">"South Africa"</span>, <span class="st">"South Korea"</span>, <span class="st">"South Sudan"</span>, </span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Spain"</span>, <span class="st">"Sri Lanka"</span>, <span class="st">"Sudan"</span>, <span class="st">"Suriname"</span>, <span class="st">"Sweden"</span>, <span class="st">"Switzerland"</span>, <span class="st">"Syria"</span>, <span class="st">"Taiwan Province of China"</span>, </span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Tajikistan"</span>, <span class="st">"Tanzania"</span>, <span class="st">"Thailand"</span>, <span class="st">"Togo"</span>, <span class="st">"Tonga"</span>, <span class="st">"Trinidad and Tobago"</span>, <span class="st">"Tunisia"</span>, </span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Türkiye"</span>, <span class="st">"Turkmenistan"</span>, <span class="st">"Tuvalu"</span>, <span class="st">"Uganda"</span>, <span class="st">"Ukraine"</span>, <span class="st">"United Arab Emirates"</span>, <span class="st">"United Kingdom"</span>, </span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">"United States"</span>, <span class="st">"Uruguay"</span>, <span class="st">"Uzbekistan"</span>, <span class="st">"Vanuatu"</span>, <span class="st">"Vatican City"</span>, <span class="st">"Venezuela"</span>, <span class="st">"Vietnam"</span>, </span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Yemen"</span>, <span class="st">"Zambia"</span>, <span class="st">"Zimbabwe"</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(countries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 194</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>missing_countries <span class="ot">&lt;-</span> countries[<span class="sc">!</span>countries <span class="sc">%in%</span> <span class="fu">unique</span>(data<span class="sc">$</span><span class="st">"Country name"</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(missing_countries)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Andorra"                          "Antigua and Barbuda"             
+ [3] "Bahamas"                          "Barbados"                        
+ [5] "Brunei"                           "Cabo Verde"                      
+ [7] "Congo"                            "Dominica"                        
+ [9] "East Timor"                       "Equatorial Guinea"               
+[11] "Eritrea"                          "Fiji"                            
+[13] "Grenada"                          "Guinea-Bissau"                   
+[15] "Kiribati"                         "Liechtenstein"                   
+[17] "Marshall Islands"                 "Micronesia"                      
+[19] "Monaco"                           "Nauru"                           
+[21] "North Korea"                      "Palau"                           
+[23] "Papua New Guinea"                 "Saint Kitts and Nevis"           
+[25] "Saint Lucia"                      "Saint Vincent and the Grenadines"
+[27] "Samoa"                            "San Marino"                      
+[29] "Sao Tome and Principe"            "Seychelles"                      
+[31] "Solomon Islands"                  "Tonga"                           
+[33] "Tuvalu"                           "Vanuatu"                         
+[35] "Vatican City"                    </code></pre>
+</div>
+</div>
+<p>We can see that there are 33 countries that are not included in the survey.</p>
+</section>
+</section>
 </section>
 <section id="data-cleaning-and-transformation" class="level2">
 <h2 class="anchored" data-anchor-id="data-cleaning-and-transformation">Data cleaning and transformation</h2>
-<p>As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from ” ” to “_” will be done for future convience sake.</p>
+<p>As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from ” ” to “_” will be done for future convenience sake.</p>
 <section id="delimiter-change" class="level3">
 <h3 class="anchored" data-anchor-id="delimiter-change">Delimiter change</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>))</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
   Country_name  year Life_Ladder Log_GDP_per_capita Social_support
@@ -214,9 +367,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="filter-data-for-years-2021---2023" class="level3">
 <h3 class="anchored" data-anchor-id="filter-data-for-years-2021---2023">Filter data for years 2021 - 2023</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>))</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
   Country_name  year Life_Ladder Log_GDP_per_capita Social_support
@@ -236,13 +389,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="filling-in-empty-data" class="level3">
 <h3 class="anchored" data-anchor-id="filling-in-empty-data">Filling in empty data</h3>
-<p>We will be getting the mean of exisiting data for each country to fill in any empty data.</p>
+<p>We will be getting the mean of existing data for each country to fill in any empty data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country_name) <span class="sc">%&gt;%</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(., <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country_name) <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(., <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
 # Groups:   Country_name [2]
@@ -265,9 +418,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="dropping-missing-data">Dropping missing data</h3>
 <p>We will drop any rows with missing data to ensure the data is clean and ready for analysis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
 # Groups:   Country_name [2]
