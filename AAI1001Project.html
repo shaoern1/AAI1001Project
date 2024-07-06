@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.554">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -175,6 +175,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p><strong>Correct Date for the Visualization</strong>: Ensure that the title and data presented in the visualization are consistent and accurate. Use the correct date to avoid confusion among the audience and maintain the credibility of the visualization.</p></li>
 </ol>
 </section>
+<section id="integration-of-interactive-choropleth-map." class="level1">
+<h1>Integration of interactive choropleth map.</h1>
+<p>To address the limitations of the original visualization, we propose integrating an interactive choropleth map that allows users to explore global happiness levels in more detail. The interactive map will provide users with the flexibility to interact with the data, compare happiness scores across different countries and years, and gain insights into the factors influencing happiness levels.</p>
+<p>The interactive choropleth map will include the following features:</p>
+<ol type="1">
+<li><p><strong>Hover-over Information</strong>: Users can hover over countries to see detailed information, including the country name, happiness score, and key variables influencing happiness levels. This feature will enable users to explore specific countries and gain insights into the factors driving happiness levels.</p></li>
+<li><p><strong>Filtering and Sorting</strong>: Users can filter the data based on specific criteria, such as region, happiness score range, or key variables. This feature will allow users to customize the data visualization according to their preferences and focus on specific aspects of the data.</p></li>
+<li><p><strong>Historical Comparison</strong>: Users can compare happiness scores across 2021-2023 by a plotted line graph. This feature will enable users to track changes in happiness levels over time, identify trends, and gain insights into the factors driving these changes.</p></li>
+</ol>
+</section>
 <section id="data-sources" class="level1">
 <h1>Data sources</h1>
 <p>For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023. The dataset contains information on the happiness scores of countries worldwide, along with key variables such as GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption. The data will be used to create visualizations that highlight the happiness levels across different countries and regions, as well as the factors influencing these levels.</p>
@@ -187,7 +197,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="data-cleaning-and-transformation" class="level2">
 <h2 class="anchored" data-anchor-id="data-cleaning-and-transformation">Data cleaning and transformation</h2>
-<p>As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from ” ” to “_” will be done for future convience sake.</p>
+<p>As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from ” ” to “_” will be done for future convinience sake.</p>
 <section id="delimiter-change" class="level3">
 <h3 class="anchored" data-anchor-id="delimiter-change">Delimiter change</h3>
 <div class="cell">
@@ -287,6 +297,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section>
 </section>
+</section>
+<section id="references" class="level1">
+<h1>References</h1>
+<ol type="1">
+<li><a href="https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/">Visualcapitalist.com</a></li>
+<li><a href="https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf">World Happiness Report</a></li>
+<li><a href="https://happiness-report.s3.amazonaws.com/2024/DataForTable2.1.xls">World Happiness Report Dataset</a></li>
+</ol>
 </section>
 
 </main>
