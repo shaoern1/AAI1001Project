@@ -13,21 +13,22 @@ output:
 
 For this document, we will be using the following packages:
 
-```{r}
+```{r, include=FALSE}
+
 library(readxl)
 library(dplyr)
 library(tidyverse)
 ```
 
-# Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from Visualcapitalist.com
+# Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from [Visualcapitalist.com](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/)
 
-Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the World Happiness Report (WHR) serves as a vital tool. Initiated by the United Nations Sustainable Development Solutions Network, the WHR annually ranks countries based on the self-reported happiness of their citizens.
+Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the World Happiness Report [WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf) serves as a vital tool. Initiated by the United Nations Sustainable Development Solutions Network, the WHR annually ranks countries based on the self-reported happiness of their citizens.
 
 The report utilizes data primarily sourced from the Gallup World Poll sub dataset in the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the Cantril Ladder. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
 
-The following visualization from Visualcapitalist.com presents the global happiness levels in 2024, as reported in the World Happiness Report. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+The following visualization from [Visualcapitalist.com](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the World Happiness Report. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
 
-![Figure 1: Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.jpg){#Fig1} 
+![Figure 1: Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.jpg){#Fig1}
 
 ![Figure 2: Map of Happiness Levels of East Asia + Oceania in 2024](Images/OC_Happiness_East-Asia-Oceania_820.jpg){#Fig2}
 
@@ -53,19 +54,22 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 ![Inconsistent Labeling example](Images/inconsistent_labeling_weakness.png){#Fig3 width="200"}
 
-3.  **Inconsistent Labeling**: 
-  -   The labeling of happiness scores and name of countries are inconsistent in placement or are not displayed, making it challenging for the audience to quickly identify and compare scores across countries.
-  -   A standardized labeling format would improve the readability and clarity of the visualization. In addition to this, there are countries' happiness scores that are not labeled due to the lack of space for example Cambodia and Laos, which may lead to confusion for the audience.
-  -   Furthermore, the lack of pointers and inconsistent formatting severely affect readability for countries such Philippines and Indonesia have confusing unclear placements as to which country the label belongs to.
+3.  **Inconsistent Labeling**:
+
+-   The labeling of happiness scores and name of countries are inconsistent in placement or are not displayed, making it challenging for the audience to quickly identify and compare scores across countries.
+-   A standardized labeling format would improve the readability and clarity of the visualization. In addition to this, there are countries' happiness scores that are not labeled due to the lack of space for example Cambodia and Laos, which may lead to confusion for the audience.
+-   Furthermore, the lack of pointers and inconsistent formatting severely affect readability for countries such Philippines and Indonesia have confusing unclear placements as to which country the label belongs to.
 
 4.  **Limited Historical Comparison**: The visualization only presents the happiness scores for the year 2024, without providing any historical comparison or trend analysis. Including data from previous years or a time slider feature would allow users to track changes in happiness levels over time and identify emerging patterns or trends.
 
 5.  **Limited Data Insights**: The visualization focuses solely on the happiness scores of countries without providing additional insights or analysis of the data. Including annotations, data summaries, or comparisons with other relevant metrics would enrich the audience's understanding of the factors influencing happiness levels.
 
-6. **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
+6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
 
 ![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4} 
 7. **Linear Scale**: The linear scale at the bottom of the region map is poorly visualised and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+
+8. **Incorrect Date for the Visualization**: The visualization is titled "A Map of Global Happiness by Country in 2024" but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
 
 # Proposed Improvements
 
@@ -84,6 +88,8 @@ To address the weaknesses of the original data visualisation, we propose the fol
 6.  **Accessible Color Schemes**: Use color schemes that are accessible to users with color vision deficiencies, such as color-blindness. Ensure that the visualization is inclusive and can be easily interpreted by all users, regardless of their color vision abilities.
 
 7.  **Improved Linear Scale Visualization**: Enhance the linear scale visualization to provide a clear and distinct separation between countries. Avoid clustering and overlapping of icons to improve readability and enable users to interpret and compare the happiness scores of each country within the region effectively.
+
+8.  **Correct Date for the Visualization**: Ensure that the title and data presented in the visualization are consistent and accurate. Use the correct date to avoid confusion among the audience and maintain the credibility of the visualization.
 
 # Data sources
 

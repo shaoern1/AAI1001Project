@@ -104,43 +104,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>For this document, we will be using the following packages:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attaching package: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ forcats   1.0.0     ✔ readr     2.1.5
-✔ ggplot2   3.5.1     ✔ stringr   1.5.1
-✔ lubridate 1.9.3     ✔ tibble    3.2.1
-✔ purrr     1.0.2     ✔ tidyr     1.3.1</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-</div>
 <section id="original-data-visualization-on-the-mapping-of-global-happiness-levels-in-a-world-map-in-2024-from-visualcapitalist.com" class="level1">
-<h1>Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from Visualcapitalist.com</h1>
-<p>Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual’s sense of well-being. To quantitatively assess and compare these levels internationally, the World Happiness Report (WHR) serves as a vital tool. Initiated by the United Nations Sustainable Development Solutions Network, the WHR annually ranks countries based on the self-reported happiness of their citizens.</p>
+<h1>Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from <a href="https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/">Visualcapitalist.com</a></h1>
+<p>Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual’s sense of well-being. To quantitatively assess and compare these levels internationally, the World Happiness Report <a href="https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf">WHR</a> serves as a vital tool. Initiated by the United Nations Sustainable Development Solutions Network, the WHR annually ranks countries based on the self-reported happiness of their citizens.</p>
 <p>The report utilizes data primarily sourced from the Gallup World Poll sub dataset in the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the Cantril Ladder. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.</p>
-<p>The following visualization from Visualcapitalist.com presents the global happiness levels in 2024, as reported in the World Happiness Report. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.</p>
+<p>The following visualization from <a href="https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/">Visualcapitalist.com</a> presents the global happiness levels in 2024, as reported in the World Happiness Report. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="images/OC-World-Happiness-Report-2024_Mar19.jpg" class="img-fluid figure-img"></p>
@@ -188,6 +156,9 @@ Attaching package: 'dplyr'</code></pre>
 <li><p><strong>Color Blindness</strong>: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.</p></li>
 </ol>
 <p><img src="images/linear_scale_of_happiness_region.png" id="Fig4" class="img-fluid" alt="Figure 3: Linear scale of Happiness score of each country by region"> 7. <strong>Linear Scale</strong>: The linear scale at the bottom of the region map is poorly visualised and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.</p>
+<ol start="8" type="1">
+<li><strong>Incorrect Date for the Visualization</strong>: The visualization is titled “A Map of Global Happiness by Country in 2024” but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.</li>
+</ol>
 </section>
 </section>
 <section id="proposed-improvements" class="level1">
@@ -201,6 +172,7 @@ Attaching package: 'dplyr'</code></pre>
 <li><p><strong>User-Friendly Design</strong>: Design the data visualization with a user-friendly interface that is intuitive and easy to navigate. Consider the audience’s needs and preferences when developing the visualization to ensure an engaging and informative user experience.</p></li>
 <li><p><strong>Accessible Color Schemes</strong>: Use color schemes that are accessible to users with color vision deficiencies, such as color-blindness. Ensure that the visualization is inclusive and can be easily interpreted by all users, regardless of their color vision abilities.</p></li>
 <li><p><strong>Improved Linear Scale Visualization</strong>: Enhance the linear scale visualization to provide a clear and distinct separation between countries. Avoid clustering and overlapping of icons to improve readability and enable users to interpret and compare the happiness scores of each country within the region effectively.</p></li>
+<li><p><strong>Correct Date for the Visualization</strong>: Ensure that the title and data presented in the visualization are consistent and accurate. Use the correct date to avoid confusion among the audience and maintain the credibility of the visualization.</p></li>
 </ol>
 </section>
 <section id="data-sources" class="level1">
@@ -210,7 +182,7 @@ Attaching package: 'dplyr'</code></pre>
 <h2 class="anchored" data-anchor-id="importing-dataset">Importing dataset</h2>
 <p>We will be importing the dataset using the <code>readxl</code> package. The dataset will be stored in a data frame for further analysis and visualization.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"DataForTable2.1.xls"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data<span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"DataForTable2.1.xls"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="data-cleaning-and-transformation" class="level2">
@@ -219,9 +191,9 @@ Attaching package: 'dplyr'</code></pre>
 <section id="delimiter-change" class="level3">
 <h3 class="anchored" data-anchor-id="delimiter-change">Delimiter change</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>))</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_with</span>(<span class="sc">~</span><span class="fu">str_replace_all</span>(., <span class="st">" "</span>, <span class="st">"_"</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
   Country_name  year Life_Ladder Log_GDP_per_capita Social_support
@@ -242,9 +214,9 @@ Attaching package: 'dplyr'</code></pre>
 <section id="filter-data-for-years-2021---2023" class="level3">
 <h3 class="anchored" data-anchor-id="filter-data-for-years-2021---2023">Filter data for years 2021 - 2023</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>))</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2021</span>, <span class="dv">2022</span>, <span class="dv">2023</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
   Country_name  year Life_Ladder Log_GDP_per_capita Social_support
@@ -266,11 +238,11 @@ Attaching package: 'dplyr'</code></pre>
 <h3 class="anchored" data-anchor-id="filling-in-empty-data">Filling in empty data</h3>
 <p>We will be getting the mean of exisiting data for each country to fill in any empty data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country_name) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(., <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Country_name) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span><span class="fu">replace_na</span>(., <span class="fu">mean</span>(., <span class="at">na.rm =</span> <span class="cn">TRUE</span>))))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
 # Groups:   Country_name [2]
@@ -293,9 +265,9 @@ Attaching package: 'dplyr'</code></pre>
 <h3 class="anchored" data-anchor-id="dropping-missing-data">Dropping missing data</h3>
 <p>We will drop any rows with missing data to ensure the data is clean and ready for analysis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
 # Groups:   Country_name [2]
