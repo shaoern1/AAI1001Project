@@ -90,6 +90,19 @@ To address the weaknesses of the original data visualization, we propose the fol
 
 8.  **Correct Date for the Visualization**: Ensure that the title and data presented in the visualization are consistent and accurate. Use the correct date to avoid confusion among the audience and maintain the credibility of the visualization.
 
+# Integration of interactive choropleth map.
+
+To address the limitations of the original visualization, we propose integrating an interactive choropleth map that allows users to explore global happiness levels in more detail. The interactive map will provide users with the flexibility to interact with the data, compare happiness scores across different countries and years, and gain insights into the factors influencing happiness levels.
+
+The interactive choropleth map will include the following features:
+
+1.  **Hover-over Information**: Users can hover over countries to see detailed information, including the country name, happiness score, and key variables influencing happiness levels. This feature will enable users to explore specific countries and gain insights into the factors driving happiness levels.
+
+2.  **Filtering and Sorting**: Users can filter the data based on specific criteria, such as region, happiness score range, or key variables. This feature will allow users to customize the data visualization according to their preferences and focus on specific aspects of the data.
+
+3.  **Historical Comparison**: Users can compare happiness scores across 2021-2023 by a plotted line graph. This feature will enable users to track changes in happiness levels over time, identify trends, and gain insights into the factors driving these changes.
+
+
 # Data sources
 
 For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023. The dataset contains information on the happiness scores of countries worldwide, along with key variables such as GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption. The data will be used to create visualizations that highlight the happiness levels across different countries and regions, as well as the factors influencing these levels.
@@ -186,7 +199,8 @@ We can see that there are 33 countries that are not included in the survey.
 
 ## Data cleaning and transformation
 
-As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "\_" will be done for future convenience sake.
+
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "\_" will be done for future convinience sake.
 
 ### Delimiter change
 
@@ -225,3 +239,10 @@ data <- data %>%
   drop_na()
 head(data)
 ```
+
+# References
+
+1.  [Visualcapitalist.com](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/)
+2.  [World Happiness Report](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)
+3.  [World Happiness Report Dataset](https://happiness-report.s3.amazonaws.com/2024/DataForTable2.1.xls)
+
