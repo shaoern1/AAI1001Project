@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.553">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -136,21 +136,15 @@ Attaching package: 'dplyr'</code></pre>
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 </div>
-<p>1st refer: Where ot come from 2nd refer: where you data is coming from</p>
+<p>1st refer: Where to come from 2nd refer: where you data is coming from</p>
 <section id="original-data-visualisation-on-world-happiness-reportwhr-2021---2023" class="level1">
 <h1>Original Data Visualisation on World Happiness Report(WHR) 2021 - 2023</h1>
-<p>The data visualization we have chosen is Table 2.2 from the World Happiness Report (WHR) (Figure 1), which shows the ranking of life evaluations for four age groups: “The Young,” “Lower Middle,” “Upper Middle,” and “The Old,” from 2021 to 2023.</p>
-<p>This visualization is significant because it highlights the perception of happiness in each country by demographic age group. It can be used to learn about the factors and geographical influences affecting each country, helping us understand how to maximize overall happiness.</p>
-<p>Despite being clear and easy to read, the visualization has some limitations. Firstly, the missing scores for each age group make it difficult for users to understand the magnitude of the differences in scores and identify trends and patterns in the data. Additionally, the table format requires users to scan through the entire table to identify changes in scores over time, making it challenging to see trends and patterns easily. Therefore, we propose the following improvements to address the weaknesses of the original visualization:</p>
-<ol type="1">
-<li><p>Include the actual scores for each age group to provide a clearer understanding of the differences in scores.</p></li>
-<li><p>Use a different formats, such as a line graph or bar chart, to make it easier to identify trends and patterns over time.</p></li>
-<li><p>Create an interactive data visualization that allows users to explore the data in more detail. These changes aim to enhance the clarity and usefulness of the data visualization, making it more effective for analyzing and interpreting the data.</p></li>
-</ol>
+<p>The data visualization we have chosen is Table 2.2 from the World Happiness Report (WHR) (Figure 1), which shows the ranking of 156 countries based on how happy their citizens perceive themselves to be.</p>
+<p>This visualization is significant because it highlights the perception of happiness in each country based on the relevant factors which includes the GDP per Capita, Social Support provided, level of Freedom, Generosity of the country and Life Expectancy of the population. It can be used to learn about the factors and geographical influences affecting each country, helping us understand how to maximize overall happiness.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Images/datavisualisation.jpeg" class="img-fluid figure-img"></p>
-<figcaption>Figure 1: WHR table 2.2: Ranking of life evaluation of age group, 2021 - 2023</figcaption>
+<p><img src="Images/SourceDataVisualisation.png" class="img-fluid figure-img"></p>
+<figcaption>Figure 1: WHR Scatter Chart 2.2: Ranking of Countries Happiness Index, 2019</figcaption>
 </figure>
 </div>
 </section>
@@ -159,13 +153,15 @@ Attaching package: 'dplyr'</code></pre>
 <p>Summarize the team’s critical analysis of the strengths and weaknesses of the original visualization. Describe any improvements you intend to incorporate.</p>
 <section id="strengths" class="level2">
 <h2 class="anchored" data-anchor-id="strengths">Strengths</h2>
-<p>For users who are interested in getting a quick answer which, the table format is easy to read and understand. The data is presented in a clear and concise manner, making it easy to compare the life evaluation scores of different age groups across three years. The use of color coding also helps to highlight the differences in scores, making it easier for users to identify trends and patterns in the data.</p>
+<p>As you select between the different tabs at the top, the dots on the scatter chart will shift around, allowing viewers to easily see how each factor could potentially affect the level on the happiness index.</p>
+<p>Although it is messy, each dot is also separated based on the continent that each country resides in. It may still not be the most efficient way to search for a specific country but it does help to narrow down the list of countries that are displayed. It also helps to show roughly which continents are thriving more than others in the happiness department.</p>
 </section>
 <section id="weaknesses" class="level2">
 <h2 class="anchored" data-anchor-id="weaknesses">Weaknesses</h2>
-<p>As the data only shows the ranking of life evaluation of age group from 2021 to 2023, it is difficult to see the actual scores of each age group. This makes it hard for users to understand the magnitude of the differences in scores between age groups. The table format also makes it difficult to see the trends and patterns in the data, as users have to scan through the entire table to identify changes in scores over time.</p>
-<p>Furthermore, for the label for “Happiest” and “Least Happy” is also not quantified, and does not show the disparity of the scores between the age groups.</p>
-<p>Lastly, the data has very extensive amounts of data. It is hard to see the trends and patterns in the data, as users have to scan through the entire table to identify changes in scores over time.</p>
+<p>This data is only based on data received in 2019. There is no way to view potential trends of growing or shrinking happiness levels within countries over the course of a few years.</p>
+<p>The data also faces the issue of some dots being difficult to view as the size of the dots is determined by the population size of each country. Countries such as Singapore have very small dots which not only make them difficult to locate but also mouse over.</p>
+<p>The data also faces the issue of overlapping dots. Bigger dots on the chart may completely cover smaller dots and in some cases viewers are not able to view those dots that are being covered completely.</p>
+<p>The chart can also be misleading as when the population size of a country is bigger, the dot for that country could be seen as higher than smaller dots on the y-axis. For example, China is ranked number 93 while Algeria is ranked number 88 but due to China’s large population size, it looks as if it has a higher happiness index than Algeria.</p>
 </section>
 </section>
 <section id="proposed-improvements" class="level1">
@@ -177,15 +173,15 @@ Attaching package: 'dplyr'</code></pre>
 </section>
 <section id="lineplots" class="level2">
 <h2 class="anchored" data-anchor-id="lineplots">Lineplots</h2>
-<p>To further give our users a better understanding of the trends and patterns in the data, we will use line plots to visualise the data of each country. Line plots are effective in showing trends over time and will allow users to see how the life evaluation scores of different age groups change from 2021 to 2023. By using line plots, users will be able to identify patterns in the data more easily and make more informed decisions based on the data.</p>
+<p>To further give our users a better understanding of the trends and patterns in the data, we will use line plots to visualise the data of each country. Line plots are effective in showing trends over time and will allow users to see how the life evaluation scores change from 2021 to 2023. By using line plots, users will be able to identify patterns in the data more easily and make more informed decisions based on the data.</p>
 </section>
 <section id="interactive-data-visualisation" class="level2">
 <h2 class="anchored" data-anchor-id="interactive-data-visualisation">Interactive Data Visualisation</h2>
-<p>We will create an interactive data visualisation that allows users to explore the data in more detail. Users will be able to hover over the data points to see the actual scores of each age group and compare the scores across different years. The interactive data visualisation will also include filters that allow users to focus on specific age groups or years, making it easier to identify trends and patterns in the data.</p>
+<p>We will create an interactive data visualisation that allows users to explore the data in more detail. Users will be able to hover over the data points to see the actual scores of each age group and compare the scores across different years. The interactive data visualisation will also include filters that allow users to focus on specific countries, making it easier to identify trends and patterns in the data.</p>
 </section>
 </section>
-<section id="data-souces" class="level1">
-<h1>Data souces</h1>
+<section id="data-sources" class="level1">
+<h1>Data sources</h1>
 <p>For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023.</p>
 <section id="importing-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="importing-dataset">Importing dataset</h2>
