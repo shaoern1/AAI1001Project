@@ -1,46 +1,64 @@
 ---
 title: "AAI1001 Team Project Proposal"
-format: html
-editor: visual
-author: Toh Shao Ern, Kuick Si Qi, Wong Khin Foong, Sebestian Fernandez, Yu Haotong
-output:
-  html_document:
+format: 
+  html:
     toc: true
-    toc_depth: 2
-    number_sections: true
-    section_depth: 2
+    toc-depth: 2
+    number-sections: true
+    section-depth: 2
+editor: visual
+author: 
+  - Toh Shao Ern
+  - Kuick Si Qi
+  - Wong Khin Foong
+  - Sebestian Fernandez
+  - Yu Haotong
 ---
 
 For this document, we will be using the following packages:
 
-```{r, include=FALSE}
+```{r include=FALSE}
 
 library(readxl)
 library(dplyr)
 library(tidyverse)
+library(knitr)
 ```
 
-# Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from [Visualcapitalist.com](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/)
+``` r
+library(readxl)
+library(dplyr)
+library(tidyverse)
+library(knitr)
+```
 
-Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the World Happiness Report [WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf) serves as a vital tool. Initiated by the United Nations Sustainable Development Solutions Network, the WHR annually ranks countries based on the self-reported happiness of their citizens.
+# Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from Visualcapitalist
+---
 
-The report utilizes data primarily sourced from the Gallup World Poll sub dataset in the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the Cantril Ladder. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
+Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)) serves as a vital tool. Initiated by the **United Nations Sustainable Development Solutions Network**, the WHR annually ranks countries based on the self-reported happiness of their citizens.
 
-The following visualization from [Visualcapitalist.com](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the World Happiness Report. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+The report utilizes data primarily sourced from the **Gallup World Poll** ([GWP](https://www.gallup.com/analytics/318875/global-research.aspx)), a sub-dataset of the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the **Cantril Ladder**. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
 
-![Figure 1: Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.jpg){#Fig1}
+The following visualization from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
 
-![Figure 2: Map of Happiness Levels of East Asia + Oceania in 2024](Images/OC_Happiness_East-Asia-Oceania_820.jpg){#Fig2}
+```{r fig-1, echo=FALSE, fig.cap="Figure 1: Global Overview World map of Happiness Levels in 2024"}
+knitr::include_graphics("images/OC-World-Happiness-Report-2024_Mar19.jpg")
+```
+
+```{r fig-2, echo=FALSE, fig.cap="Figure 2: Map of Happiness Levels of East Asia + Oceania in 2024"}
+knitr::include_graphics("Images/OC_Happiness_East-Asia-Oceania_820.jpg")
+```
 
 # Critical Assessment and Strength & Weaknesses of the Original Visualization
+---
 
-The Global World Map in [Figure 1](#fig1) and the region map [Figure 2](#fig2) visualizes three variables: country, happiness score, and geographical location. The visualization indicates at the top, the color gradient legend indicating that the countries are color-coded based on their happiness scores, with a spectrum ranging from blue (least happy, score of 1) through pink (average happiness, score of 4) to yellow (happiest, score of 8).
+The Global World Map in @fig-1. and the region map @fig-2. visualizes three variables: country, happiness score, and geographical location. The visualization indicates at the top, the color gradient legend indicating that the countries are color-coded based on their happiness scores, with a spectrum *ranging from blue (least happy, score of 1) through pink (average happiness, score of 4) to yellow (happiest, score of 8)*.
 
 Further more the countries are also labeled with their respective happiness scores in a bolded text, such as the label "6.5" on Finland, indicating the happiness score of Finland.
 
-In addition to this they also provide pointers to the countries with the highest and lowest happiness scores in their respective region, such as the pointer on Finland indicating "MOST HAPPY: EUROPE" on the contrary would be pointer to Ukraine with the label "LEAST HAPPY: EUROPE". This provides a quick overview of the happiness levels in different regions of the world.
+In addition to this they also provide pointers to the countries with the highest and lowest happiness scores in their respective region, such as the pointer on Finland indicating `"MOST HAPPY: EUROPE"` on the contrary would be pointer to Ukraine with the label `"LEAST HAPPY: EUROPE"`. This provides a quick overview of the happiness levels in different regions of the world.
 
-The news media also provides a zoomed in version of the world map [Figure 2](#fig2) for a more detailed view of the happiness scores per region, with the countries inconsistently labeled with their respective happiness scores and country name. This allows readers to focus on a specific region and compare the happiness scores of different countries within that region. In addition to this they also provide a linear scale of the happiness scores of each country in the respective region at the bottom of the map in [Figure 2](#2).
+The news media also provides a zoomed in version of the world map @fig-2 for a more detailed view of the happiness scores per region, with the countries inconsistently labeled with their respective happiness scores and country name. This allows readers to focus on a specific region and compare the happiness scores of different countries within that region. In addition to this they also provide a linear scale of the happiness scores of each country in the respective region at the bottom of the map in @fig-2.
 
 Overall, the original visual is effective in communicating to the readers of the Happiness Levels across the countries. However, there are some shortcomings the team has identified:
 
@@ -66,11 +84,14 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
 
-![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4} 7. **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4} 
 
-8.  **Incorrect Date for the Visualization**: The visualization is titled "A Map of Global Happiness by Country in 2024" but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
+7. **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+
+8.  **Incorrect Date for the Visualization**: The visualization is titled **"A Map of Global Happiness by Country in 2024"** but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
 
 # Proposed Improvements
+---
 
 To address the weaknesses of the original data visualization, we propose the following improvements:
 
@@ -91,6 +112,7 @@ To address the weaknesses of the original data visualization, we propose the fol
 8.  **Correct Date for the Visualization**: Ensure that the title and data presented in the visualization are consistent and accurate. Use the correct date to avoid confusion among the audience and maintain the credibility of the visualization.
 
 # Integration of interactive choropleth map.
+---
 
 To address the limitations of the original visualization, we propose integrating an interactive choropleth map that allows users to explore global happiness levels in more detail. The interactive map will provide users with the flexibility to interact with the data, compare happiness scores across different countries and years, and gain insights into the factors influencing happiness levels.
 
@@ -102,8 +124,8 @@ The interactive choropleth map will include the following features:
 
 3.  **Historical Comparison**: Users can compare happiness scores across 2021-2023 by a plotted line graph. This feature will enable users to track changes in happiness levels over time, identify trends, and gain insights into the factors driving these changes.
 
-
 # Data sources
+---
 
 For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023. The dataset contains information on the happiness scores of countries worldwide, along with key variables such as GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption. The data will be used to create visualizations that highlight the happiness levels across different countries and regions, as well as the factors influencing these levels.
 
@@ -116,7 +138,7 @@ data <- read_excel("DataForTable2.1.xls")
 data
 ```
 
-### Data Understanding
+## Data Understanding
 
 ```{r}
 summary(data)
@@ -124,35 +146,39 @@ summary(data)
 
 From this, we can see that there are 11 variables in the dataset. The variables include Country name, year, Life Ladde, Log GDP per capita, Social support, Healthy life expectancy at birth, Freedom to make life choices, Generosity, Perceptions of corruption, Positive affect, Negative affect. These variables will be used to create visualizations that provide insights into the happiness levels of countries worldwide and the factors influencing these levels.
 
-#### Breakdown of the columns:
-1. **Country name**: This is a categorical variable representing the name of the country. It is stored as a character class. The dataset encompasses observations from multiple countries around the world.
+### Breakdown of the columns:
 
-2. **Year**: This variable represents the year in which the happiness data was collected, ranging from 2005 to 2023. It indicates the temporal aspect of the data, allowing for trend analysis over the years.
+---
+1.  **Country name**: This is a categorical variable representing the name of the country. It is stored as a character class. The dataset encompasses observations from multiple countries around the world.
 
-3. **Life Ladder**: Often referred to as the happiness score, this variable measures the subjective well-being and overall life satisfaction of people in each country. The scores range from a minimum of 1.281 to a maximum of 8.019, suggesting a wide variance in perceived happiness.
+2.  **Year**: This variable represents the year in which the happiness data was collected, ranging from 2005 to 2023. It indicates the temporal aspect of the data, allowing for trend analysis over the years.
 
-4. **Log GDP per capita**: This is a logarithmic transformation of GDP per capita, reflecting the economic prosperity of a country normalized on a log scale to reduce skewness and enhance interpretability. The values range from 5.527 to 11.676, with some missing values, indicating varied economic statuses across the dataset.
+3.  **Life Ladder**: Often referred to as the happiness score, this variable measures the subjective well-being and overall life satisfaction of people in each country. The scores range from a minimum of 1.281 to a maximum of 8.019, suggesting a wide variance in perceived happiness.
 
-5. **Social support**: Measured on a scale from 0 to 1, this variable quantifies the extent of social support perceived by individuals in their country. Higher values indicate better perceived social support, with a maximum value of 0.9873 suggesting strong social networks in some areas.
+4.  **Log GDP per capita**: This is a logarithmic transformation of GDP per capita, reflecting the economic prosperity of a country normalized on a log scale to reduce skewness and enhance interpretability. The values range from 5.527 to 11.676, with some missing values, indicating varied economic statuses across the dataset.
 
-6. **Healthy life expectancy at birth**: This indicator provides the number of years a newborn is expected to live in "good" health, based on current trends in health and mortality. It varies significantly across countries, with values ranging from 6.72 to 74.60 years, reflecting disparities in healthcare and living conditions.
+5.  **Social support**: Measured on a scale from 0 to 1, this variable quantifies the extent of social support perceived by individuals in their country. Higher values indicate better perceived social support, with a maximum value of 0.9873 suggesting strong social networks in some areas.
 
-7. **Freedom to make life choices**: This variable measures the perceived freedom of individuals in making life choices, again ranging from 0 to 1. Countries with higher values are considered to have greater personal freedoms.
+6.  **Healthy life expectancy at birth**: This indicator provides the number of years a newborn is expected to live in "good" health, based on current trends in health and mortality. It varies significantly across countries, with values ranging from 6.72 to 74.60 years, reflecting disparities in healthcare and living conditions.
 
-8. **Generosity**: This reflects the average degree of generosity of a country's residents, with a range from -0.33955 to 0.69957. Negative values might indicate less frequent expressions of generosity compared to the baseline, whereas positive values indicate the opposite.
+7.  **Freedom to make life choices**: This variable measures the perceived freedom of individuals in making life choices, again ranging from 0 to 1. Countries with higher values are considered to have greater personal freedoms.
 
-9. **Perceptions of corruption**: This measures the general perception of corruption within political institutions on a scale from 0 to 1, with higher values indicating worse corruption. This variable helps in understanding trust in governmental organizations.
+8.  **Generosity**: This reflects the average degree of generosity of a country's residents, with a range from -0.33955 to 0.69957. Negative values might indicate less frequent expressions of generosity compared to the baseline, whereas positive values indicate the opposite.
+
+9.  **Perceptions of corruption**: This measures the general perception of corruption within political institutions on a scale from 0 to 1, with higher values indicating worse corruption. This variable helps in understanding trust in governmental organizations.
 
 10. **Positive affect**: This represents the prevalence of positive emotions in the population, measured on a scale from 0 to 1. Higher values suggest that people frequently experience positive emotions such as joy and pride.
 
 11. **Negative affect**: Conversely, this measures the prevalence of negative emotions, also on a scale from 0 to 1. Higher values indicate that negative emotions such as sadness and anger are more common.
 
-#### Summary Statistics Overview:
-- Each variable has summary statistics provided, such as the minimum, first quartile (25th percentile), median (50th percentile), mean, third quartile (75th percentile), and maximum values. 
-- NA values are noted for several variables, indicating missing data points that may need to be addressed during data preprocessing.
-- The presence of both mean and median values helps identify skewness in the data distribution. For example, if the mean is significantly higher than the median, it suggests a right-skewed distribution.
+### Summary Statistics Overview:
+---
 
-#### Unrepresented Countries
+-   Each variable has summary statistics provided, such as the minimum, first quartile (25th percentile), median (50th percentile), mean, third quartile (75th percentile), and maximum values.
+-   NA values are noted for several variables, indicating missing data points that may need to be addressed during data preprocessing.
+-   The presence of both mean and median values helps identify skewness in the data distribution. For example, if the mean is significantly higher than the median, it suggests a right-skewed distribution.
+
+### Unrepresented Countries
 
 ```{r}
 #| code-fold: true
@@ -195,12 +221,12 @@ length(countries)
 missing_countries <- countries[!countries %in% unique(data$"Country name")]
 print(missing_countries)
 ```
+
 We can see that there are 33 countries that are not included in the survey.
 
 ## Data cleaning and transformation
 
-
-As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "\_" will be done for future convinience sake.
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.Some additional steps such as changing delimiters from " " to "\_" will be done for future convenience sake.
 
 ### Delimiter change
 
@@ -240,9 +266,15 @@ data <- data %>%
 head(data)
 ```
 
+# Conclusion
+---
+
+In this project proposal, we have critically assessed an original data visualization on the mapping of global happiness levels in a world map in 2024. We identified several weaknesses in the original visualization, such as the lack of interactivity, limited context, inconsistent labeling, and the absence of historical comparison. To address these limitations, we proposed improvements, including the integration of an interactive choropleth map, consistent labeling, historical comparison, and data insights. We also discussed the data sources, data understanding, and data cleaning steps for the project. By implementing these improvements, we aim to create a more informative and engaging data visualization that provides insights into global happiness levels and the factors influencing these levels.
+
 # References
 
-1.  [Visualcapitalist.com](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/)
-2.  [World Happiness Report](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)
-3.  [World Happiness Report Dataset](https://happiness-report.s3.amazonaws.com/2024/DataForTable2.1.xls)
+1.  Desjardins, J. (2024). *A map of global happiness by country in 2024*. Visual Capitalist. Retrieved from <https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/>{ref1}
 
+2.  World Happiness Report. (2024). *World Happiness Report 2024*. Retrieved from <https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf>
+
+3.  World Happiness Report. (2024). *Data for Table 2.1*. Retrieved from <https://happiness-report.s3.amazonaws.com/2024/DataForTable2.1.xls>
