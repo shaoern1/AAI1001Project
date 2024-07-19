@@ -133,7 +133,7 @@ head(df_filtered)
 
 ```{r}
 # List of all countries in your data
-all_countries <- unique(df_combined$country)
+all_countries <- unique(df_filtered$country)
 
 # List of years to ensure each country has entries for each year
 years <- c(2021, 2022, 2023)
@@ -145,7 +145,7 @@ complete_df <- expand.grid(country = all_countries, year = years)
 complete_df$country_code <- countrycode(complete_df$country, origin = "country.name", destination = "iso3c")
 
 # Merge the complete data frame with the original data
-df_combined <- left_join(complete_df, df_combined, by = c("country", "year", "country_code"))
+df_combined <- left_join(complete_df, df_filtered, by = c("country", "year"))
 
 # Calculate the mean score for each country
 country_means <- df_combined %>%
@@ -167,6 +167,7 @@ if (nrow(missing_scores) > 0) {
 
 # Inspect the data for missing scores
 print(missing_scores)
+```
 
 ```
 
@@ -357,6 +358,19 @@ plot_combined <- ggplot(combined_data, aes(x = reorder(country, mean_score), y =
 # Print the combined plot
 print(plot_combined)
 
+
+```
+
+```{r}
+# Create scatter plot x = year, y = score
+
+ggplot(df_combined, aes(x = year, y = score, color = score_bin)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_color_viridis_d(option = "plasma", na.value = "grey90", name = "Score Bin") +
+  labs(title = "Happiness Score Over Time", x = "Year", y = "Score") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)
 
 ```
 
