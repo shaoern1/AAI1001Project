@@ -169,14 +169,33 @@ if (nrow(missing_scores) > 0) {
 print(missing_scores)
 ```
 
+```{r}
+region <- read_csv("data/all.csv")
+region <- region %>% select("alpha-3", region)
+head(region)
+
+# merge the region data with the complete_df
+df_combined_region <- left_join(df_combined, region, by = c("country_code" = "alpha-3"))
+missing_region <- df_combined_region %>% filter(is.na(region))
+head(df_combined_region)
+print(missing_region)
+#fill taiwan with asia and kosovo with europe
+
+df_combined_region$region[which(df_combined_region$country == "Taiwan Province of China")] <- "Asia"
+df_combined_region$region[which(df_combined_region$country == "Kosovo")] <- "Europe"
+#check if there are any missing regions
+missing_region <- df_combined_region %>% filter(is.na(region))
+print(missing_region)
 ```
+
+```
+
 
 ## Data Visualization
 
 ### World Map
 
 ```{r}
-
 # Get world data
 world <- ne_countries(scale = "small", returnclass = "sf")
 
@@ -358,19 +377,6 @@ plot_combined <- ggplot(combined_data, aes(x = reorder(country, mean_score), y =
 # Print the combined plot
 print(plot_combined)
 
-
-```
-
-```{r}
-# Create scatter plot x = year, y = score
-
-ggplot(df_combined, aes(x = year, y = score, color = score_bin)) +
-  geom_point() +
-  geom_smooth(method = "lm", se = FALSE) +
-  scale_color_viridis_d(option = "plasma", na.value = "grey90", name = "Score Bin") +
-  labs(title = "Happiness Score Over Time", x = "Year", y = "Score") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5)
 
 ```
 
