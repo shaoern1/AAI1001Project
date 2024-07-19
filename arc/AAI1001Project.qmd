@@ -33,8 +33,7 @@ library(tidyverse)
 library(knitr)
 ```
 
-# Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from Visualcapitalist
----
+## \# Original Data Visualization on the Mapping of Global Happiness Levels in a World Map in 2024 from Visualcapitalist
 
 Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)) serves as a vital tool. Initiated by the **United Nations Sustainable Development Solutions Network**, the WHR annually ranks countries based on the self-reported happiness of their citizens.
 
@@ -50,8 +49,7 @@ knitr::include_graphics("images/OC-World-Happiness-Report-2024_Mar19.jpg")
 knitr::include_graphics("Images/OC_Happiness_East-Asia-Oceania_820.jpg")
 ```
 
-# Critical Assessment and Strength & Weaknesses of the Original Visualization
----
+## \# Critical Assessment and Strength & Weaknesses of the Original Visualization
 
 The Global World Map in @fig-1. and the region map @fig-2. visualizes three variables: country, happiness score, and geographical location. The visualization indicates at the top, the color gradient legend indicating that the countries are color-coded based on their happiness scores, with a spectrum *ranging from blue (least happy, score of 1) through pink (average happiness, score of 4) to yellow (happiest, score of 8)*.
 
@@ -85,14 +83,13 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
 
-![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4} 
+![Figure 3: Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#Fig4}
 
-7. **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+7.  **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
 
 8.  **Incorrect Date for the Visualization**: The visualization is titled **"A Map of Global Happiness by Country in 2024"** but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
 
-# Proposed Improvements
----
+## \# Proposed Improvements
 
 To address the weaknesses of the original data visualization, we propose the following improvements:
 
@@ -112,8 +109,7 @@ To address the weaknesses of the original data visualization, we propose the fol
 
 8.  **Correct Date for the Visualization**: Ensure that the title and data presented in the visualization are consistent and accurate. Use the correct date to avoid confusion among the audience and maintain the credibility of the visualization.
 
-# Integration of interactive choropleth map.
----
+## \# Integration of interactive choropleth map.
 
 To address the limitations of the original visualization, we propose integrating an interactive choropleth map that allows users to explore global happiness levels in more detail. The interactive map will provide users with the flexibility to interact with the data, compare happiness scores across different countries and years, and gain insights into the factors influencing happiness levels.
 
@@ -125,8 +121,7 @@ The interactive choropleth map will include the following features:
 
 3.  **Historical Comparison**: Users can compare happiness scores across 2021-2023 by a plotted line graph. This feature will enable users to track changes in happiness levels over time, identify trends, and gain insights into the factors driving these changes.
 
-# Data sources
----
+## \# Data sources
 
 For our project, we will be using the World Happiness Report (WHR) dataset, which is available on the World Happiness Report website. We will be doing the latest 3 years from 2021 - 2023. The dataset contains information on the happiness scores of countries worldwide, along with key variables such as GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption. The data will be used to create visualizations that highlight the happiness levels across different countries and regions, as well as the factors influencing these levels.
 
@@ -267,8 +262,7 @@ data <- data %>%
 head(data)
 ```
 
-# Conclusion
----
+## \# Conclusion
 
 In this project proposal, we have critically assessed an original data visualization on the mapping of global happiness levels in a world map in 2024. We identified several weaknesses in the original visualization, such as the lack of interactivity, limited context, inconsistent labeling, and the absence of historical comparison. To address these limitations, we proposed improvements, including the integration of an interactive choropleth map, consistent labeling, historical comparison, and data insights. We also discussed the data sources, data understanding, and data cleaning steps for the project. By implementing these improvements, we aim to create a more informative and engaging data visualization that provides insights into global happiness levels and the factors influencing these levels.
 
