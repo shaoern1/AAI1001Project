@@ -30,6 +30,9 @@ if (!require("readxl")) install.packages("readxl", dependencies = TRUE)
 if (!require("knitr")) install.packages("knitr", dependencies = TRUE)
 if (!require("dplyr")) install.packages("dplyr", dependencies = TRUE)
 if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
+if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
+if (!require("grid")) install.packages("grid", dependencies = TRUE)
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
 ```
 
 ```{r include=FALSE}
@@ -43,6 +46,9 @@ library(rnaturalearth) # World map data from Natural Earth
 library(countrycode) # get ISO code from country names
 library(ggrepel) # "ggplot2" extension for overlapping text labels
 library(viridis) # color palettes for "ggplot2")
+library(gridExtra) # arrange multiple grid-based plots on a page
+library(grid) # grid graphics system for R
+library(ggplot2) # create elegant data visualizations using the Grammar of Graphics
 ```
 
 ## Load Data
@@ -380,3 +386,108 @@ print(plot_combined)
 
 ```
 
+##  Distribution Chart of Scores
+
+```{r}
+
+data = df_combined
+
+
+# Fit a normal distribution to the data
+mu <- mean(data$score, na.rm = TRUE)
+std <- sd(data$score, na.rm = TRUE)
+median <- median(data$score, na.rm = TRUE)
+mode <- as.numeric(names(sort(table(data$score), decreasing = TRUE)[1]))  # Mode calculation
+
+# Create histogram data
+hist_data <- data %>%
+  filter(!is.na(score)) %>%
+  ggplot(aes(x = score)) +
+  geom_histogram(bins = 20, color = "white", alpha = 0.75, aes(y = ..count.., fill = ..x..)) +
+  scale_fill_viridis(option = "plasma", name = "Score") +
+  labs(title = "Distribution of Happiness Scores (2021-2023)",
+       x = "Happiness Score",
+       y = "Number of Countries") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 18, face = "bold", color = "#333333", margin = margin(b = 20)),
+        axis.title.x = element_text(size = 14, color = "#333333"),
+        axis.title.y = element_text(size = 14, color = "#333333"),
+        axis.text = element_text(size = 12, color = "#333333"),
+        panel.grid.major.y = element_line(linetype = "dotted", size = 0.5, color = "grey"),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
+
+# Filter out zero count bins
+hist_data <- ggplot_build(hist_data)$data[[1]] %>%
+  filter(count > 0)
+
+# Create the histogram with the filtered data
+histogram <- ggplot(hist_data, aes(x = x, y = count, fill = x)) +
+  geom_bar(stat = "identity", color = "white", alpha = 0.75) +
+  scale_fill_viridis(option = "plasma", name = "Score") +
+  labs(title = "Distribution of Happiness Scores (2021-2023)",
+       x = "Happiness Score",
+       y = "Number of Countries") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 18, face = "bold", color = "#333333", margin = margin(b = 20)),
+        axis.title.x = element_text(size = 14, color = "#333333"),
+        axis.title.y = element_text(size = 14, color = "#333333"),
+        axis.text = element_text(size = 12, color = "#333333"),
+        panel.grid.major.y = element_line(linetype = "dotted", size = 0.5, color = "grey"),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
+
+# Add count labels on top of each bar
+histogram <- histogram +
+  geom_text(aes(label = count), vjust = -0.5, size = 4)
+
+# Define the range for x and compute y for the normal distribution
+x <- seq(min(data$score, na.rm = TRUE), max(data$score, na.rm = TRUE), length.out = 100)
+y <- dnorm(x, mean = mu, sd = std)
+
+# Increase the height of the curve by scaling
+scale_factor <- 150  # Adjust this value as needed
+y <- y * scale_factor
+
+# Add the normal distribution curve
+histogram <- histogram +
+  geom_line(data = data.frame(x = x, y = y), aes(x = x, y = y), color = "#006400", size = 1, linetype = "dotted") +
+  geom_vline(xintercept = mu, color = "red", linetype = "dashed", size = 1)
+
+# Find the y-value of the mean line on the normal distribution curve
+mean_y <- dnorm(mu, mean = mu, sd = std) * scale_factor
+
+# Extract plot limits
+xlims <- ggplot_build(histogram)$layout$panel_params[[1]]$x.range
+ylims <- ggplot_build(histogram)$layout$panel_params[[1]]$y.range
+
+# Create a table with statistics
+stats_table <- textGrob(
+  label = paste("Median: ", sprintf("%.2f", median), "\n",
+                "Mode: ", sprintf("%.2f", mode), "\n",
+                "Standard Deviation: ", sprintf("%.2f", std)),
+  gp = gpar(fontsize = 12, col = c("blue", "green", "purple")),
+  hjust = 0,
+  vjust = 1
+)
+
+# Create the mean annotation separately
+mean_annotation <- textGrob(
+  label = sprintf("Mean: %.2f", mu),
+  gp = gpar(fontsize = 12, col = "red"),
+  hjust = 1,
+  vjust = 1
+)
+
+# Add the statistics table to the top-left corner and the mean annotation to the top-left of the mean line
+histogram <- histogram +
+  annotation_custom(grob = stats_table, xmin = xlims[1], xmax = xlims[1] + (xlims[2] - xlims[1]) * 0.2, ymin = ylims[2], ymax = ylims[2] - (ylims[2] - ylims[1]) * 0.2) +
+  annotation_custom(grob = mean_annotation, xmin = mu - (xlims[2] - xlims[1]) * 0.05, xmax = mu, ymin = ylims[2] - (ylims[2] - ylims[1]) * 0.1, ymax = ylims[2])
+
+# Print the histogram
+print(histogram)
+
+
+```
