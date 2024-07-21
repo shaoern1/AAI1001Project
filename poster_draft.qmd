@@ -1,0 +1,382 @@
+---
+title: "AAI1001_poster_draft"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    section-depth: 2
+    embed-resource: true
+editor: visual
+author: 
+  - Toh Shao Ern
+  - Kuick Si Qi
+  - Wong Khin Foong
+  - Sebestian Fernandez
+  - Yu Haotong
+---
+
+# AAI1001 Poster Draft
+
+## Load Library
+
+```{r include=FALSE}
+if (!require("tidyverse")) install.packages("tidyverse", dependencies = TRUE)
+if (!require("sf")) install.packages("sf", dependencies = TRUE)
+if (!require("rnaturalearth")) install.packages("rnaturalearth", dependencies = TRUE)
+if (!require("countrycode")) install.packages("countrycode", dependencies = TRUE)
+if (!require("ggrepel")) install.packages("ggrepel", dependencies = TRUE)
+if (!require("readxl")) install.packages("readxl", dependencies = TRUE)
+if (!require("knitr")) install.packages("knitr", dependencies = TRUE)
+if (!require("dplyr")) install.packages("dplyr", dependencies = TRUE)
+if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
+```
+
+```{r include=FALSE}
+
+library(readxl)
+library(dplyr)
+library(knitr)
+library(tidyverse) # load dplyr, ggplot2, stringr, etc.
+library(sf) # working with geographic simple features in R
+library(rnaturalearth) # World map data from Natural Earth
+library(countrycode) # get ISO code from country names
+library(ggrepel) # "ggplot2" extension for overlapping text labels
+library(viridis) # color palettes for "ggplot2")
+```
+
+## Load Data
+
+```{r}
+df <- read_excel("data/DataForTable2.1.xls")
+df
+```
+
+## Data Understanding
+
+```{r}
+summary(df)
+head(df)
+```
+
+## List and Identify Missing Countries
+
+```{r}
+#| code-fold: true
+#| code-summary: "Show the total list of Countries in the world"
+countries <- c(
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
+  "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", 
+  "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", 
+  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", 
+  "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic",
+  "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", 
+  "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", 
+  "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", 
+  "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", 
+  "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", 
+  "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", 
+  "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", 
+  "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", 
+  "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", 
+  "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", 
+  "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", 
+  "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", 
+  "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", 
+  "Pakistan", "Palau", "State of Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", 
+  "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", 
+  "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", 
+  "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", 
+  "Slovenia", "Solomon Islands", "Somaliland region", "South Africa", "South Korea", "South Sudan", 
+  "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan Province of China", 
+  "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", 
+  "Türkiye", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", 
+  "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", 
+  "Yemen", "Zambia", "Zimbabwe"
+)
+length(countries)
+```
+
+```{r}
+# how many countries are missing in the dataset use Country name
+missing_countries <- setdiff(countries, unique(df$"Country name"))
+missing_countries
+
+```
+
+We can see that there are 34 countries missing from the dataset.
+
+## Data Cleaning and Transformation
+
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.
+
+### Filter data for years 2021 - 2023
+
+```{r}
+df <- df %>%
+  filter(year %in% c(2021, 2022, 2023))
+head(df)
+```
+
+### Renaming headers and keeping only the necessary columns
+
+```{r}
+# Rename the columns
+colnames(df) <- c("country", "year", "score", colnames(df)[4:ncol(df)])
+
+# Keep only the specified columns
+df_filtered <- df[, c("country", "year", "score")]
+head(df_filtered)
+```
+
+### Include Missing Countries with NA Scores
+
+```{r}
+# List of all countries in your data
+all_countries <- unique(df_filtered$country)
+
+# List of years to ensure each country has entries for each year
+years <- c(2021, 2022, 2023)
+
+# Create a data frame with all combinations of countries and years
+complete_df <- expand.grid(country = all_countries, year = years)
+
+# Add country codes to the complete data frame
+complete_df$country_code <- countrycode(complete_df$country, origin = "country.name", destination = "iso3c")
+
+# Merge the complete data frame with the original data
+df_combined <- left_join(complete_df, df_filtered, by = c("country", "year"))
+
+# Calculate the mean score for each country
+country_means <- df_combined %>%
+  group_by(country) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE))
+
+# Merge the country means back into the combined data
+df_combined <- left_join(df_combined, country_means, by = "country")
+
+# Fill any remaining NA values with the mean score of the respective country
+df_combined <- df_combined %>%
+  mutate(score = ifelse(is.na(score), mean_score, score))
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Inspect the data for missing scores
+print(missing_scores)
+```
+
+```{r}
+region <- read_csv("data/all.csv")
+region <- region %>% select("alpha-3", region)
+head(region)
+
+# merge the region data with the complete_df
+df_combined_region <- left_join(df_combined, region, by = c("country_code" = "alpha-3"))
+missing_region <- df_combined_region %>% filter(is.na(region))
+head(df_combined_region)
+print(missing_region)
+#fill taiwan with asia and kosovo with europe
+
+df_combined_region$region[which(df_combined_region$country == "Taiwan Province of China")] <- "Asia"
+df_combined_region$region[which(df_combined_region$country == "Kosovo")] <- "Europe"
+#check if there are any missing regions
+missing_region <- df_combined_region %>% filter(is.na(region))
+print(missing_region)
+```
+
+```
+
+
+## Data Visualization
+
+### World Map
+
+```{r}
+# Get world data
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+# Filter data for each year
+df_2021 <- df_combined %>% filter(year == 2021)
+df_2022 <- df_combined %>% filter(year == 2022)
+df_2023 <- df_combined %>% filter(year == 2023)
+
+# Convert country names to country codes
+df_2021$country_code <- countrycode(df_2021$country, origin = "country.name", destination = "iso3c")
+df_2022$country_code <- countrycode(df_2022$country, origin = "country.name", destination = "iso3c")
+df_2023$country_code <- countrycode(df_2023$country, origin = "country.name", destination = "iso3c")
+
+# Merge world data with each year's data
+world_data_2021 <- left_join(world, df_2021, by = c("iso_a3" = "country_code"))
+world_data_2022 <- left_join(world, df_2022, by = c("iso_a3" = "country_code"))
+world_data_2023 <- left_join(world, df_2023, by = c("iso_a3" = "country_code"))
+
+# Check for missing data after the join
+missing_world_2021 <- world_data_2021 %>% filter(is.na(score))
+missing_world_2022 <- world_data_2022 %>% filter(is.na(score))
+missing_world_2023 <- world_data_2023 %>% filter(is.na(score))
+
+print(missing_world_2021)
+print(missing_world_2022)
+print(missing_world_2023)
+
+# Plot data for 2021
+ggplot() +
+  geom_sf(data = world_data_2021, aes(fill = score)) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2021", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2022
+ggplot() +
+  geom_sf(data = world_data_2022, aes(fill = score)) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2022", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2023
+ggplot() +
+  geom_sf(data = world_data_2023, aes(fill = score)) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2023", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+
+```
+
+```{r}
+# Create bins for the scores with 0.5 intervals
+bins <- seq(0, 10, by = 0.5)
+labels <- paste0(bins[-length(bins)], "-", bins[-1])
+df_combined <- df_combined %>%
+  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
+
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Inspect the data for missing scores
+print(missing_scores)
+
+# Get world data
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+# Filter data for each year
+df_2021 <- df_combined %>% filter(year == 2021)
+df_2022 <- df_combined %>% filter(year == 2022)
+df_2023 <- df_combined %>% filter(year == 2023)
+
+# Merge world data with each year's data
+world_data_2021 <- left_join(world, df_2021, by = c("iso_a3" = "country_code"))
+world_data_2022 <- left_join(world, df_2022, by = c("iso_a3" = "country_code"))
+world_data_2023 <- left_join(world, df_2023, by = c("iso_a3" = "country_code"))
+
+# Check for missing data after the join
+missing_world_2021 <- world_data_2021 %>% filter(is.na(score))
+missing_world_2022 <- world_data_2022 %>% filter(is.na(score))
+missing_world_2023 <- world_data_2023 %>% filter(is.na(score))
+
+print(missing_world_2021)
+print(missing_world_2022)
+print(missing_world_2023)
+
+# Plot data for 2021
+ggplot() +
+  geom_sf(data = world_data_2021, aes(fill = score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2021", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2022
+ggplot() +
+  geom_sf(data = world_data_2022, aes(fill = score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2022", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2023
+ggplot() +
+  geom_sf(data = world_data_2023, aes(fill = score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2023", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+```
+
+##  Top 5, Middle 5, Bottom 5 Countries Bar Graph
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(viridis)
+library(scales)
+
+# Calculate the mean score for each country
+country_means <- df_combined %>%
+  group_by(country) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE)) %>%
+  arrange(desc(mean_score))
+
+# Assign colors based on scores
+assign_colors <- function(scores, palette = "plasma", direction = 1) {
+  normalized_scores <- rescale(scores, to = c(0, 1))
+  colors <- viridis_pal(option = palette, direction = direction)(length(unique(normalized_scores)))
+  score_colors <- setNames(colors[rank(unique(normalized_scores), ties.method = "first")], unique(normalized_scores))
+  return(score_colors[as.character(normalized_scores)])
+}
+
+# Apply colors globally
+country_means$color <- assign_colors(country_means$mean_score)
+
+# Calculate the top, middle, and bottom countries
+top_5 <- country_means %>% top_n(5, mean_score) %>% mutate(category = "Top 5")
+middle_start <- ceiling((nrow(country_means) - 5) / 2)
+middle_end <- middle_start + 4
+middle_5 <- country_means %>% slice(middle_start:middle_end) %>% mutate(category = "Middle 5")
+bottom_5 <- country_means %>% top_n(-5, mean_score) %>% mutate(category = "Bottom 5")
+
+# Combine the data and set the category order
+combined_data <- bind_rows(top_5, middle_5, bottom_5) %>%
+  mutate(category = factor(category, levels = c("Top 5", "Middle 5", "Bottom 5")))
+
+# Create the faceted plot
+plot_combined <- ggplot(combined_data, aes(x = reorder(country, mean_score), y = mean_score, fill = color)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(mean_score, 2), hjust = -0.1)) +
+  coord_flip() +
+  scale_fill_identity() +
+  labs(x = "Country", y = "Mean Score") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(limits = c(0, 10)) +
+  facet_wrap(~category, scales = "free_y", ncol = 1)
+
+# Print the combined plot
+print(plot_combined)
+
+
+```
+

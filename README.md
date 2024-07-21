@@ -1,3 +1,3 @@
 # AAI1001Project
 
-Test1
+Repository for our Data Engineering and Visualisation Project
