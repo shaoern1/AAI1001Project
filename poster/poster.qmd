@@ -1,0 +1,152 @@
+---
+title: Exploring the Insights within the Global Happiness Index
+format:
+  poster-typst: 
+    size: "36x24"
+    poster-authors: "Toh Shao Ern, Kuick Si Qi, Wong Khin Foong, Sebestian Fernandez, Yu Haotong"
+    departments: "Group 12"
+    univ-logo-scale: "50"
+    num-columns: "3"
+    institution-logo: "./images/SIT-Logo.png"
+    footer-text: "Prepared for Dr Hua, By Group 12"
+    footer-url: "https://singaporetech.edu.sg"
+    footer-emails: "sit@singaporetech.edu.sg"
+    footer-color: "ebcfb2"
+    keywords: ["Happiness Index", "Typst", "Quarto"]
+---
+
+# Introduction
+
+## Mapping Global Happiness Levels
+
+Happiness levels worldwide are influenced by economic, social, psychological, and environmental factors that contribute to an individual's well-being. The World Happiness Report (WHR), initiated by the United Nations Sustainable Development Solutions Network, ranks countries annually based on self-reported happiness of their citizens. Data from the Gallup World Poll (GWP), a subset of WHR, uses the Cantril Ladder scale (0-10) to evaluate life satisfaction. Key variables influencing happiness include GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
+
+## Objective
+
+To critically assess and enhance a static visualization of global happiness levels, identifying its strengths and weaknesses, and proposing improvements for a more interactive and insightful presentation.
+
+# Methods
+
+## Data Sources
+
+World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide.
+Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
+
+## Data Understanding and Cleaning
+
+Importing Dataset: Using readxl package to load WHR data into a dataframe.
+
+```r
+data <- read_excel("DataForTable2.1.xls")
+```
+
+Summary Statistics: Assessing variables such as Country name, Year, Life Ladder, Log GDP per capita, Social support, Healthy life expectancy, Freedom to make life choices, Generosity, Perceptions of corruption, Positive affect, and Negative affect.
+
+```r
+summary(data)
+```
+
+Identifying Missing Data: Filtering and filling in missing values with country-specific means.
+
+```r
+data <- data %>%
+  group_by(Country_name) %>%
+  mutate(across(everything(), ~replace_na(., mean(., na.rm = TRUE))))
+```
+Filtering Relevant Years: Focusing on data from 2021 to 2023 for trend analysis.
+
+```r
+data <- data %>%
+  filter(year %in% c(2021, 2022, 2023))
+```
+
+## Critical Assessment and Proposed Improvements
+::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
+
+1. Interactive Data Visualization:
+- Implement hover-over information for detailed country data.
+- Add filtering and sorting capabilities.
+- Include historical comparison using a time slider.
+
+2. Consistent Labeling and Annotations:
+- Standardize labeling format for readability.
+- Provide annotations explaining key variables influencing happiness.
+
+3. Accessible Design:
+- Ensure a user-friendly interface.
+- Use color schemes accessible to color-blind users.
+
+4. Data Insights and Analysis:
+- Provide summaries and comparisons with relevant metrics.
+- Enhance linear scale visualization for regional comparisons.
+
+These methods aim to create an improved, interactive visualization of global happiness levels, offering better insights and user engagement.
+
+:::
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri.
+
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut.
+
+| Lorem ipsum dolor sit. | Lorem ipsum. | Lorem ipsum. |
+|------------------------|--------------|--------------|
+| Lorem ipsum dolor.     | Lorem ipsum. | $\alpha$     |
+| Lorem ipsum.           | Lorem ipsum. | $\beta$      |
+| Lorem.                 | Lorem.       | $\gamma$     |
+| Lorem ipsum dolor.     | Lorem.       | $\theta$     |
+
+: Lorem ipsum dolor sit amet {#tbl-1}
+
+Lorem @tbl-1 ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
+
+## Lorem ipsum dolor sit amet
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre.
+
+![Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.](./images/Standard_lettering.png){width="100%"}
+
+# Findings
+
+::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplifi- carique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
+
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+
+:::
+
+## Lorem ipsum etiam
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. 
+
+# Conclusion
+
+Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. 
+
+![Temperature and ozone level](images/fig-airquality-1.svg)
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
+
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+  - Lorem ipsum dolor sit amet.
+  -  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+  - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed. 
+  - Lorem ipsum dolor sit amet, consectetur adipiscing.
+
+$$
+\sum_(k=1)^n k = \frac{(n(n+1))}{2} = \frac{(n^2 + n)}{2}
+$$
+
+# Acknowledgement
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
+

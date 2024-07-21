@@ -196,6 +196,7 @@ df_combined_region$`World Region according to the World Bank`[which(df_combined_
 df_combined_region$`World Region according to the World Bank`[which(df_combined_region$`World Region according to the World Bank` == "Latin America and Caribbean")] <- "America and Caribbean"
 
 ```
+
 #Create violin plot
 
 ```{r}
@@ -210,7 +211,6 @@ ggplot(df_combined_region, aes(y = `World Region according to the World Bank`, x
   )
 
 ```
-
 
 ## Data Visualization
 
@@ -345,7 +345,7 @@ ggplot() +
   coord_sf(crs = "+proj=robin")
 ```
 
-##  Top 5, Middle 5, Bottom 5 Countries Bar Graph
+## Top 5, Middle 5, Bottom 5 Countries Bar Graph
 
 ```{r}
 library(ggplot2)
@@ -399,7 +399,7 @@ print(plot_combined)
 
 ```
 
-##  Distribution Chart of Scores
+## Distribution Chart of Scores
 
 ```{r}
 
