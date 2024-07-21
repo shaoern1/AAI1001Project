@@ -176,23 +176,38 @@ print(missing_scores)
 ```
 
 ```{r}
-region <- read_csv("data/all.csv")
-region <- region %>% select("alpha-3", region)
+region <- read_csv("data/world-regions-according-to-the-world-bank.csv")
 head(region)
 
-# merge the region data with the complete_df
-df_combined_region <- left_join(df_combined, region, by = c("country_code" = "alpha-3"))
-missing_region <- df_combined_region %>% filter(is.na(region))
+df_combined_region <- left_join(df_combined, region, by = c("country_code" = "Code"))
 head(df_combined_region)
-print(missing_region)
-#fill taiwan with asia and kosovo with europe
+# find empty rows in "World Region according to the World Bank"
 
-df_combined_region$region[which(df_combined_region$country == "Taiwan Province of China")] <- "Asia"
-df_combined_region$region[which(df_combined_region$country == "Kosovo")] <- "Europe"
-#check if there are any missing regions
-missing_region <- df_combined_region %>% filter(is.na(region))
+
+missing_region <- df_combined_region %>% filter(is.na(`World Region according to the World Bank`))
 print(missing_region)
+
+df_combined_region$`World Region according to the World Bank`[which(df_combined_region$country == "Taiwan Province of China")] <- "East Asia and Pacific"
+
+missing_region <- df_combined_region %>% filter(is.na(`World Region according to the World Bank`))
+print(missing_region)
+
+df_combined_region$`World Region according to the World Bank`[which(df_combined_region$`World Region according to the World Bank` == "North America")] <- "Latin America and Caribbean"
+df_combined_region$`World Region according to the World Bank`[which(df_combined_region$`World Region according to the World Bank` == "Latin America and Caribbean")] <- "America and Caribbean"
+
 ```
+#Create violin plot
+
+```{r}
+ggplot(df_combined_region, aes(y = `World Region according to the World Bank`, x = mean_score, fill = `World Region according to the World Bank`)) +
+  geom_violin(trim = FALSE) +  # Create horizontal violin plots
+  geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
+  scale_fill_viridis(discrete = TRUE, guide = FALSE) +  # Use viridis color scale for discrete data and remove legend
+  labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
+  theme_minimal() +  # Use a minimal theme
+  theme(
+    plot.title = element_text(hjust = 0.5)  # Center the plot title
+  )
 
 ```
 
@@ -258,8 +273,6 @@ ggplot() +
   labs(title = "World Map of Happiness - 2023", fill = "Score") +
   theme(plot.title = element_text(hjust = 0.5)) +
   coord_sf(crs = "+proj=robin")
-
-
 ```
 
 ```{r}
