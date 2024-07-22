@@ -15,15 +15,89 @@ format:
     keywords: ["Happiness Index", "Typst", "Quarto"]
 ---
 
+```{r include=FALSE}
+if (!require("tidyverse")) install.packages("tidyverse", dependencies = TRUE)
+if (!require("sf")) install.packages("sf", dependencies = TRUE)
+if (!require("rnaturalearth")) install.packages("rnaturalearth", dependencies = TRUE)
+if (!require("countrycode")) install.packages("countrycode", dependencies = TRUE)
+if (!require("ggrepel")) install.packages("ggrepel", dependencies = TRUE)
+if (!require("readxl")) install.packages("readxl", dependencies = TRUE)
+if (!require("knitr")) install.packages("knitr", dependencies = TRUE)
+if (!require("dplyr")) install.packages("dplyr", dependencies = TRUE)
+if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
+if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
+if (!require("grid")) install.packages("grid", dependencies = TRUE)
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+
+
+library(scales)
+library(readxl)
+library(dplyr)
+library(knitr)
+library(tidyverse) # load dplyr, ggplot2, stringr, etc.
+library(sf) # working with geographic simple features in R
+library(rnaturalearth) # World map data from Natural Earth
+library(countrycode) # get ISO code from country names
+library(ggrepel) # "ggplot2" extension for overlapping text labels
+library(viridis) # color palettes for "ggplot2")
+library(gridExtra) # arrange multiple grid-based plots on a page
+library(grid) # grid graphics system for R
+library(ggplot2) # create elegant data visualizations using the Grammar of Graphics
+```
+
 # Introduction
-
-## Mapping Global Happiness Levels
-
-Happiness levels worldwide are influenced by economic, social, psychological, and environmental factors that contribute to an individual's well-being. The World Happiness Report (WHR), initiated by the United Nations Sustainable Development Solutions Network, ranks countries annually based on self-reported happiness of their citizens. Data from the Gallup World Poll (GWP), a subset of WHR, uses the Cantril Ladder scale (0-10) to evaluate life satisfaction. Key variables influencing happiness include GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
 
 ## Objective
 
 To critically assess and enhance a static visualization of global happiness levels, identifying its strengths and weaknesses, and proposing improvements for a more interactive and insightful presentation.
+
+
+## Visualcapitalist's Global Happiness Levels Report
+
+Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)) serves as a vital tool. Initiated by the **United Nations Sustainable Development Solutions Network**, the WHR annually ranks countries based on the self-reported happiness of their citizens.
+
+The report utilizes data primarily sourced from the **Gallup World Poll** ([GWP](https://www.gallup.com/analytics/318875/global-research.aspx)), a sub-dataset of the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the **Cantril Ladder**. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
+
+The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+
+::: {#fig-Visualcapitalist-map layout-ncol=2}
+
+![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){width="75%" #fig-1}
+
+![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){width="75%" #fig-2}
+
+Visualcapitalist Global Happiness Levels Report
+
+:::
+
+## Weakness
+
+The original visualization has several weaknesses that limit its effectiveness in conveying the information to the audience. These weaknesses include:
+
+1.  **Lack of Interactivity**: The static nature of the world map limits the audience's ability to interact with the data and explore specific countries or regions in more detail. An interactive visualization would allow users to hover over countries to see detailed information and compare happiness scores across different years.
+
+2.  **Limited Context**: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tool-tips that explain the key variables influencing happiness levels would enhance the audience's understanding of the data.
+
+![Inconsistent Labeling example](images/inconsistent_labeling_weakness.png){width="30%"}
+
+3.  **Inconsistent Labeling**:
+
+-   The labeling of happiness scores and name of countries are inconsistent in placement or are not displayed, making it challenging for the audience to quickly identify and compare scores across countries.
+-   A standardized labeling format would improve the readability and clarity of the visualization. In addition to this, there are countries' happiness scores that are not labeled due to the lack of space for example Cambodia and Laos, which may lead to confusion for the audience.
+-   Furthermore, the lack of pointers and inconsistent formatting severely affect readability for countries such Philippines and Indonesia have confusing unclear placements as to which country the label belongs to.
+
+4.  **Limited Historical Comparison**: The visualization only presents the happiness scores for the year 2024, without providing any historical comparison or trend analysis. Including data from previous years or a time slider feature would allow users to track changes in happiness levels over time and identify emerging patterns or trends.
+
+5.  **Limited Data Insights**: The visualization focuses solely on the happiness scores of countries without providing additional insights or analysis of the data. Including annotations, data summaries, or comparisons with other relevant metrics would enrich the audience's understanding of the factors influencing happiness levels.
+
+6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
+
+![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){width="75%"}
+
+7.  **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+
+8.  **Incorrect Date for the Visualization**: The visualization is titled **"A Map of Global Happiness by Country in 2024"** but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
+
 
 # Methods
 
@@ -34,31 +108,446 @@ Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale
 
 ## Data Understanding and Cleaning
 
-Importing Dataset: Using readxl package to load WHR data into a dataframe.
+## Load Data
 
-```r
-data <- read_excel("DataForTable2.1.xls")
+```{r}
+df <- read_excel("data/DataForTable2.1.xls")
 ```
 
-Summary Statistics: Assessing variables such as Country name, Year, Life Ladder, Log GDP per capita, Social support, Healthy life expectancy, Freedom to make life choices, Generosity, Perceptions of corruption, Positive affect, and Negative affect.
+## List and Identify Missing Countries
 
-```r
-summary(data)
+```{r include=FALSE}
+countries <- c(
+  "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
+  "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", 
+  "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", 
+  "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", 
+  "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic",
+  "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", 
+  "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", 
+  "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", 
+  "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", 
+  "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", 
+  "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", 
+  "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", 
+  "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", 
+  "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", 
+  "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", 
+  "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", 
+  "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", 
+  "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", 
+  "Pakistan", "Palau", "State of Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", 
+  "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", 
+  "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", 
+  "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", 
+  "Slovenia", "Solomon Islands", "Somaliland region", "South Africa", "South Korea", "South Sudan", 
+  "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan Province of China", 
+  "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", 
+  "Türkiye", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", 
+  "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", 
+  "Yemen", "Zambia", "Zimbabwe"
+)
+length(countries)
 ```
 
-Identifying Missing Data: Filtering and filling in missing values with country-specific means.
-
-```r
-data <- data %>%
-  group_by(Country_name) %>%
-  mutate(across(everything(), ~replace_na(., mean(., na.rm = TRUE))))
+```{r}
+# how many countries are missing in the dataset use Country name
+missing_countries <- setdiff(countries, unique(df$"Country name"))
+missing_countries
 ```
-Filtering Relevant Years: Focusing on data from 2021 to 2023 for trend analysis.
 
-```r
-data <- data %>%
+We can see that there are 34 countries missing from the dataset.
+
+## Data Cleaning and Transformation
+
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.
+
+### Filter data for years 2021 - 2023
+
+```{r}
+df <- df %>%
   filter(year %in% c(2021, 2022, 2023))
+# head(df)
 ```
+
+### Renaming headers and keeping only the necessary columns
+
+```{r}
+# Rename the columns
+colnames(df) <- c("country", "year", "score", colnames(df)[4:ncol(df)])
+
+# Keep only the specified columns
+df_filtered <- df[, c("country", "year", "score")]
+# head(df_filtered)
+```
+
+### Include Missing Countries with NA Scores
+
+```{r}
+# List of all countries in your data
+all_countries <- unique(df_filtered$country)
+
+# List of years to ensure each country has entries for each year
+years <- c(2021, 2022, 2023)
+
+# Create a data frame with all combinations of countries and years
+complete_df <- expand.grid(country = all_countries, year = years)
+
+# Add country codes to the complete data frame
+complete_df$country_code <- countrycode(complete_df$country, origin = "country.name", destination = "iso3c")
+
+# Merge the complete data frame with the original data
+df_combined <- left_join(complete_df, df_filtered, by = c("country", "year"))
+
+# Calculate the mean score for each country
+country_means <- df_combined %>%
+  group_by(country) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE))
+
+# Merge the country means back into the combined data
+df_combined <- left_join(df_combined, country_means, by = "country")
+
+# Fill any remaining NA values with the mean score of the respective country
+df_combined <- df_combined %>%
+  mutate(score = ifelse(is.na(score), mean_score, score))
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Inspect the data for missing scores
+# print(missing_scores)
+```
+
+```{r}
+region <- read_csv("data/world-regions-according-to-the-world-bank.csv")
+# head(region)
+
+df_combined_region <- left_join(df_combined, region, by = c("country_code" = "Code"))
+# head(df_combined_region)
+# find empty rows in "World Region according to the World Bank"
+
+
+missing_region <- df_combined_region %>% filter(is.na(`World Region according to the World Bank`))
+# print(missing_region)
+
+df_combined_region$`World Region according to the World Bank`[which(df_combined_region$country == "Taiwan Province of China")] <- "East Asia and Pacific"
+
+missing_region <- df_combined_region %>% filter(is.na(`World Region according to the World Bank`))
+# print(missing_region)
+
+df_combined_region$`World Region according to the World Bank`[which(df_combined_region$`World Region according to the World Bank` == "North America")] <- "Latin America and Caribbean"
+df_combined_region$`World Region according to the World Bank`[which(df_combined_region$`World Region according to the World Bank` == "Latin America and Caribbean")] <- "America and Caribbean"
+
+```
+
+#Create violin plot
+
+```{r}
+ggplot(df_combined_region, aes(y = `World Region according to the World Bank`, x = mean_score, fill = `World Region according to the World Bank`)) +
+  geom_violin(trim = FALSE) +  # Create horizontal violin plots
+  geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
+  scale_fill_viridis(discrete = TRUE, guide = FALSE) +  # Use viridis color scale for discrete data and remove legend
+  labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
+  theme_minimal() +  # Use a minimal theme
+  theme(
+    plot.title = element_text(hjust = 0.5)  # Center the plot title
+  )
+
+```
+
+## Data Visualization
+
+### World Map
+
+```{r}
+# Get world data
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+# Filter data for each year
+df_2021 <- df_combined %>% filter(year == 2021)
+df_2022 <- df_combined %>% filter(year == 2022)
+df_2023 <- df_combined %>% filter(year == 2023)
+
+# Convert country names to country codes
+df_2021$country_code <- countrycode(df_2021$country, origin = "country.name", destination = "iso3c")
+df_2022$country_code <- countrycode(df_2022$country, origin = "country.name", destination = "iso3c")
+df_2023$country_code <- countrycode(df_2023$country, origin = "country.name", destination = "iso3c")
+
+# Merge world data with each year's data
+world_data_2021 <- left_join(world, df_2021, by = c("iso_a3" = "country_code"))
+world_data_2022 <- left_join(world, df_2022, by = c("iso_a3" = "country_code"))
+world_data_2023 <- left_join(world, df_2023, by = c("iso_a3" = "country_code"))
+
+# Check for missing data after the join
+missing_world_2021 <- world_data_2021 %>% filter(is.na(score))
+missing_world_2022 <- world_data_2022 %>% filter(is.na(score))
+missing_world_2023 <- world_data_2023 %>% filter(is.na(score))
+
+# Plot data for 2021
+ggplot() +
+  geom_sf(data = world_data_2021, aes(fill = score)) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2021", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2022
+ggplot() +
+  geom_sf(data = world_data_2022, aes(fill = score)) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2022", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2023
+ggplot() +
+  geom_sf(data = world_data_2023, aes(fill = score)) +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2023", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+```
+
+```{r}
+# Create bins for the scores with 0.5 intervals
+bins <- seq(0, 10, by = 0.5)
+labels <- paste0(bins[-length(bins)], "-", bins[-1])
+df_combined <- df_combined %>%
+  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
+
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Inspect the data for missing scores
+# print(missing_scores)
+
+# Get world data
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+# Filter data for each year
+df_2021 <- df_combined %>% filter(year == 2021)
+df_2022 <- df_combined %>% filter(year == 2022)
+df_2023 <- df_combined %>% filter(year == 2023)
+
+# Merge world data with each year's data
+world_data_2021 <- left_join(world, df_2021, by = c("iso_a3" = "country_code"))
+world_data_2022 <- left_join(world, df_2022, by = c("iso_a3" = "country_code"))
+world_data_2023 <- left_join(world, df_2023, by = c("iso_a3" = "country_code"))
+
+# Check for missing data after the join
+missing_world_2021 <- world_data_2021 %>% filter(is.na(score))
+missing_world_2022 <- world_data_2022 %>% filter(is.na(score))
+missing_world_2023 <- world_data_2023 %>% filter(is.na(score))
+
+# print(missing_world_2021)
+# print(missing_world_2022)
+# print(missing_world_2023)
+
+# Plot data for 2021
+ggplot() +
+  geom_sf(data = world_data_2021, aes(fill = score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2021", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2022
+ggplot() +
+  geom_sf(data = world_data_2022, aes(fill = score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2022", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Plot data for 2023
+ggplot() +
+  geom_sf(data = world_data_2023, aes(fill = score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - 2023", fill = "Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+```
+
+## Top 5, Middle 5, Bottom 5 Countries Bar Graph
+
+```{r}
+# Calculate the mean score for each country
+country_means <- df_combined %>%
+  group_by(country) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE)) %>%
+  arrange(desc(mean_score))
+
+# Assign colors based on scores
+assign_colors <- function(scores, palette = "plasma", direction = 1) {
+  normalized_scores <- rescale(scores, to = c(0, 1))
+  colors <- viridis_pal(option = palette, direction = direction)(length(unique(normalized_scores)))
+  score_colors <- setNames(colors[rank(unique(normalized_scores), ties.method = "first")], unique(normalized_scores))
+  return(score_colors[as.character(normalized_scores)])
+}
+
+# Apply colors globally
+country_means$color <- assign_colors(country_means$mean_score)
+
+# Calculate the top, middle, and bottom countries
+top_5 <- country_means %>% top_n(5, mean_score) %>% mutate(category = "Top 5")
+middle_start <- ceiling((nrow(country_means) - 5) / 2)
+middle_end <- middle_start + 4
+middle_5 <- country_means %>% slice(middle_start:middle_end) %>% mutate(category = "Middle 5")
+bottom_5 <- country_means %>% top_n(-5, mean_score) %>% mutate(category = "Bottom 5")
+
+# Combine the data and set the category order
+combined_data <- bind_rows(top_5, middle_5, bottom_5) %>%
+  mutate(category = factor(category, levels = c("Top 5", "Middle 5", "Bottom 5")))
+
+# Create the faceted plot
+plot_combined <- ggplot(combined_data, aes(x = reorder(country, mean_score), y = mean_score, fill = color)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(mean_score, 2), hjust = -0.1)) +
+  coord_flip() +
+  scale_fill_identity() +
+  labs(x = "Country", y = "Mean Score") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(limits = c(0, 10)) +
+  facet_wrap(~category, scales = "free_y", ncol = 1)
+
+# Print the combined plot
+print(plot_combined)
+```
+
+## Distribution Chart of Scores
+
+```{r}
+
+data = df_combined
+
+
+# Fit a normal distribution to the data
+mu <- mean(data$score, na.rm = TRUE)
+std <- sd(data$score, na.rm = TRUE)
+median <- median(data$score, na.rm = TRUE)
+mode <- as.numeric(names(sort(table(data$score), decreasing = TRUE)[1]))  # Mode calculation
+
+# Create histogram data
+hist_data <- data %>%
+  filter(!is.na(score)) %>%
+  ggplot(aes(x = score)) +
+  geom_histogram(bins = 20, color = "white", alpha = 0.75, aes(y = ..count.., fill = ..x..)) +
+  scale_fill_viridis(option = "plasma", name = "Score") +
+  labs(title = "Distribution of Happiness Scores (2021-2023)",
+       x = "Happiness Score",
+       y = "Number of Countries") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 18, face = "bold", color = "#333333", margin = margin(b = 20)),
+        axis.title.x = element_text(size = 14, color = "#333333"),
+        axis.title.y = element_text(size = 14, color = "#333333"),
+        axis.text = element_text(size = 12, color = "#333333"),
+        panel.grid.major.y = element_line(linetype = "dotted", size = 0.5, color = "grey"),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
+
+# Filter out zero count bins
+hist_data <- ggplot_build(hist_data)$data[[1]] %>%
+  filter(count > 0)
+
+# Create the histogram with the filtered data
+histogram <- ggplot(hist_data, aes(x = x, y = count, fill = x)) +
+  geom_bar(stat = "identity", color = "white", alpha = 0.75) +
+  scale_fill_viridis(option = "plasma", name = "Score") +
+  labs(title = "Distribution of Happiness Scores (2021-2023)",
+       x = "Happiness Score",
+       y = "Number of Countries") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 18, face = "bold", color = "#333333", margin = margin(b = 20)),
+        axis.title.x = element_text(size = 14, color = "#333333"),
+        axis.title.y = element_text(size = 14, color = "#333333"),
+        axis.text = element_text(size = 12, color = "#333333"),
+        panel.grid.major.y = element_line(linetype = "dotted", size = 0.5, color = "grey"),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank())
+
+# Add count labels on top of each bar
+histogram <- histogram +
+  geom_text(aes(label = count), vjust = -0.5, size = 4)
+
+# Define the range for x and compute y for the normal distribution
+x <- seq(min(data$score, na.rm = TRUE), max(data$score, na.rm = TRUE), length.out = 100)
+y <- dnorm(x, mean = mu, sd = std)
+
+# Increase the height of the curve by scaling
+scale_factor <- 150  # Adjust this value as needed
+y <- y * scale_factor
+
+# Add the normal distribution curve
+histogram <- histogram +
+  geom_line(data = data.frame(x = x, y = y), aes(x = x, y = y), color = "#006400", size = 1, linetype = "dotted") +
+  geom_vline(xintercept = mu, color = "red", linetype = "dashed", size = 1)
+
+# Find the y-value of the mean line on the normal distribution curve
+mean_y <- dnorm(mu, mean = mu, sd = std) * scale_factor
+
+# Extract plot limits
+xlims <- ggplot_build(histogram)$layout$panel_params[[1]]$x.range
+ylims <- ggplot_build(histogram)$layout$panel_params[[1]]$y.range
+
+# Create a table with statistics
+stats_table <- textGrob(
+  label = paste("Median: ", sprintf("%.2f", median), "\n",
+                "Mode: ", sprintf("%.2f", mode), "\n",
+                "Standard Deviation: ", sprintf("%.2f", std)),
+  gp = gpar(fontsize = 12, col = c("blue", "green", "purple")),
+  hjust = 0,
+  vjust = 1
+)
+
+# Create the mean annotation separately
+mean_annotation <- textGrob(
+  label = sprintf("Mean: %.2f", mu),
+  gp = gpar(fontsize = 12, col = "red"),
+  hjust = 1,
+  vjust = 1
+)
+
+# Add the statistics table to the top-left corner and the mean annotation to the top-left of the mean line
+histogram <- histogram +
+  annotation_custom(grob = stats_table, xmin = xlims[1], xmax = xlims[1] + (xlims[2] - xlims[1]) * 0.2, ymin = ylims[2], ymax = ylims[2] - (ylims[2] - ylims[1]) * 0.2) +
+  annotation_custom(grob = mean_annotation, xmin = mu - (xlims[2] - xlims[1]) * 0.05, xmax = mu, ymin = ylims[2] - (ylims[2] - ylims[1]) * 0.1, ymax = ylims[2])
+
+# Print the histogram
+print(histogram)
+```
+
+
+
+
+
+
+
+
+
+
+
 
 ## Critical Assessment and Proposed Improvements
 ::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
@@ -83,6 +572,17 @@ data <- data %>%
 These methods aim to create an improved, interactive visualization of global happiness levels, offering better insights and user engagement.
 
 :::
+
+
+# Findings
+
+## New World Map
+
+
+## Happiness Score By World Region
+
+
+
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri.
 

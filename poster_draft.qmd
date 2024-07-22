@@ -501,6 +501,4 @@ histogram <- histogram +
 
 # Print the histogram
 print(histogram)
-
-
 ```
