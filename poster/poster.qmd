@@ -29,7 +29,6 @@ if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
 if (!require("grid")) install.packages("grid", dependencies = TRUE)
 if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
 
-
 library(scales)
 library(readxl)
 library(dplyr)
@@ -162,7 +161,7 @@ As we will be only using data from 2021 - 2023, we will filter out the data from
 
 ### Filter data for years 2021 - 2023
 
-```{r}
+```{r, include=FALSE}
 df <- df %>%
   filter(year %in% c(2021, 2022, 2023))
 # head(df)
@@ -170,7 +169,7 @@ df <- df %>%
 
 ### Renaming headers and keeping only the necessary columns
 
-```{r}
+```{r, include=FALSE}
 # Rename the columns
 colnames(df) <- c("country", "year", "score", colnames(df)[4:ncol(df)])
 
@@ -181,7 +180,7 @@ df_filtered <- df[, c("country", "year", "score")]
 
 ### Include Missing Countries with NA Scores
 
-```{r}
+```{r, include=FALSE}
 # List of all countries in your data
 all_countries <- unique(df_filtered$country)
 
@@ -219,7 +218,7 @@ if (nrow(missing_scores) > 0) {
 # print(missing_scores)
 ```
 
-```{r}
+```{r, include=FALSE}
 region <- read_csv("data/world-regions-according-to-the-world-bank.csv")
 # head(region)
 
@@ -279,67 +278,11 @@ print(final_plot)
 ### World Map
 
 ```{r}
-# Get world data
-world <- ne_countries(scale = "small", returnclass = "sf")
-
-# Filter data for each year
-df_2021 <- df_combined %>% filter(year == 2021)
-df_2022 <- df_combined %>% filter(year == 2022)
-df_2023 <- df_combined %>% filter(year == 2023)
-
-# Convert country names to country codes
-df_2021$country_code <- countrycode(df_2021$country, origin = "country.name", destination = "iso3c")
-df_2022$country_code <- countrycode(df_2022$country, origin = "country.name", destination = "iso3c")
-df_2023$country_code <- countrycode(df_2023$country, origin = "country.name", destination = "iso3c")
-
-# Merge world data with each year's data
-world_data_2021 <- left_join(world, df_2021, by = c("iso_a3" = "country_code"))
-world_data_2022 <- left_join(world, df_2022, by = c("iso_a3" = "country_code"))
-world_data_2023 <- left_join(world, df_2023, by = c("iso_a3" = "country_code"))
-
-# Check for missing data after the join
-missing_world_2021 <- world_data_2021 %>% filter(is.na(score))
-missing_world_2022 <- world_data_2022 %>% filter(is.na(score))
-missing_world_2023 <- world_data_2023 %>% filter(is.na(score))
-
-# Plot data for 2021
-ggplot() +
-  geom_sf(data = world_data_2021, aes(fill = score)) +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - 2021", fill = "Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-
-# Plot data for 2022
-ggplot() +
-  geom_sf(data = world_data_2022, aes(fill = score)) +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - 2022", fill = "Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-
-# Plot data for 2023
-ggplot() +
-  geom_sf(data = world_data_2023, aes(fill = score)) +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - 2023", fill = "Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-```
-
-```{r}
 # Create bins for the scores with 0.5 intervals
 bins <- seq(0, 10, by = 0.5)
 labels <- paste0(bins[-length(bins)], "-", bins[-1])
 df_combined <- df_combined %>%
   mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
-
 
 # Check for any remaining missing values
 missing_scores <- df_combined %>% filter(is.na(score))
@@ -353,56 +296,29 @@ if (nrow(missing_scores) > 0) {
 # Get world data
 world <- ne_countries(scale = "small", returnclass = "sf")
 
-# Filter data for each year
-df_2021 <- df_combined %>% filter(year == 2021)
-df_2022 <- df_combined %>% filter(year == 2022)
-df_2023 <- df_combined %>% filter(year == 2023)
+# Compute the average score for each country over the years
+df_avg <- df_combined %>%
+  group_by(country_code) %>%
+  summarize(avg_score = mean(score, na.rm = TRUE))
 
-# Merge world data with each year's data
-world_data_2021 <- left_join(world, df_2021, by = c("iso_a3" = "country_code"))
-world_data_2022 <- left_join(world, df_2022, by = c("iso_a3" = "country_code"))
-world_data_2023 <- left_join(world, df_2023, by = c("iso_a3" = "country_code"))
+# Merge world data with the average scores
+world_data_avg <- left_join(world, df_avg, by = c("iso_a3" = "country_code"))
 
 # Check for missing data after the join
-missing_world_2021 <- world_data_2021 %>% filter(is.na(score))
-missing_world_2022 <- world_data_2022 %>% filter(is.na(score))
-missing_world_2023 <- world_data_2023 %>% filter(is.na(score))
+missing_world_avg <- world_data_avg %>% filter(is.na(avg_score))
 
-# print(missing_world_2021)
-# print(missing_world_2022)
-# print(missing_world_2023)
+# print(missing_world_avg)
 
-# Plot data for 2021
+# Plot the average data
 ggplot() +
-  geom_sf(data = world_data_2021, aes(fill = score), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
+  geom_sf(data = world_data_avg, aes(fill = avg_score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Average Score") +
   theme_minimal() +
   theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - 2021", fill = "Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-
-# Plot data for 2022
-ggplot() +
-  geom_sf(data = world_data_2022, aes(fill = score), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - 2022", fill = "Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-
-# Plot data for 2023
-ggplot() +
-  geom_sf(data = world_data_2023, aes(fill = score), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Score") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - 2023", fill = "Score") +
+  labs(title = "World Map of Happiness - Average (2021-2023)", fill = "Average Score") +
   theme(plot.title = element_text(hjust = 0.5)) +
   coord_sf(crs = "+proj=robin")
 ```
-
 
 ## Distribution Chart of Scores
 
