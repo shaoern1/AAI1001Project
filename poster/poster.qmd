@@ -78,8 +78,6 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 2.  **Limited Context**: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tool-tips that explain the key variables influencing happiness levels would enhance the audience's understanding of the data.
 
-![Inconsistent Labeling example](images/inconsistent_labeling_weakness.png){width="30%"}
-
 3.  **Inconsistent Labeling**:
 
 -   The labeling of happiness scores and name of countries are inconsistent in placement or are not displayed, making it challenging for the audience to quickly identify and compare scores across countries.
@@ -245,16 +243,34 @@ df_combined_region$`World Region according to the World Bank`[which(df_combined_
 
 #Create violin plot
 
-```{r}
-ggplot(df_combined_region, aes(y = `World Region according to the World Bank`, x = mean_score, fill = `World Region according to the World Bank`)) +
-  geom_violin(trim = FALSE) +  # Create horizontal violin plots
+```{r, fig.width=10, fig.align='center'}
+# Create the violin plot with boxplots
+base_plot <- ggplot(df_combined_region, aes(y = `World Region according to the World Bank`, x = score, fill = `World Region according to the World Bank`)) +
+  geom_violin(trim = TRUE) +  # Create horizontal violin plots
   geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
+  scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +  # Set the x-axis limits and breaks
   scale_fill_viridis(discrete = TRUE, guide = FALSE) +  # Use viridis color scale for discrete data and remove legend
   labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
   theme_minimal() +  # Use a minimal theme
   theme(
     plot.title = element_text(hjust = 0.5)  # Center the plot title
   )
+
+# Highlight the top and bottom of each region with text labels of the respective country
+highlight_data <- df_combined_region %>%
+  group_by(`World Region according to the World Bank`) %>%
+  filter(score == max(score) | score == min(score))
+
+# Add the highlighted points and text labels to the base plot
+final_plot <- base_plot +
+  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, color = score), size = 3) +
+  geom_text_repel(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, label = country),
+                  nudge_x = ifelse(highlight_data$score >= mean(highlight_data$score), 1, -1), nudge_y = 0.3, direction = "y") +
+  scale_color_viridis_c(option = "plasma", na.value = "grey90") +
+  labs(title = "Happiness Scores by World Region (2021-2023)\nwith Top and Bottom Countries Highlighted")
+
+# Print the final plot
+print(final_plot)
 
 ```
 
@@ -405,11 +421,13 @@ ggplot(df_combined, aes(x = score)) +
 
 ```
 
+Overall:
 
+The distribution suggests that while there is a central tendency around a happiness score of 6, there is considerable variability in happiness scores among countries, with more countries experiencing moderate to low levels of happiness.
 
+Distribution Shape:
 
-
-
+The distribution of happiness scores is approximately normal with a slight positive skew. This means most countries have happiness scores clustered around the middle range (4 to 6), but there are more countries with lower scores than higher scores.
 
 
 ## Critical Assessment and Proposed Improvements
