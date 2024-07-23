@@ -1,0 +1,501 @@
+---
+title: "Exploring the Insights within the Global Happiness Index"
+format: 
+  html:
+    toc: true
+    toc-depth: 2
+    number-sections: true
+    section-depth: 2
+    embed-resource: true
+editor: visual
+author: 
+  - Toh Shao Ern
+  - Kuick Si Qi
+  - Wong Khin Foong
+  - Sebestian Fernandez
+  - Yu Haotong
+---
+
+```{r setup, include=FALSE}
+# Set a CRAN mirror
+options(repos = c(CRAN = "https://cloud.r-project.org"))
+if (!require("tidyverse")) install.packages("tidyverse", dependencies = TRUE)
+if (!require("sf")) install.packages("sf", dependencies = TRUE)
+if (!require("rnaturalearth")) install.packages("rnaturalearth", dependencies = TRUE)
+if (!require("countrycode")) install.packages("countrycode", dependencies = TRUE)
+if (!require("ggrepel")) install.packages("ggrepel", dependencies = TRUE)
+if (!require("readxl")) install.packages("readxl", dependencies = TRUE)
+if (!require("knitr")) install.packages("knitr", dependencies = TRUE)
+if (!require("dplyr")) install.packages("dplyr", dependencies = TRUE)
+if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
+if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
+if (!require("grid")) install.packages("grid", dependencies = TRUE)
+if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+
+library(scales)
+library(readxl)
+library(dplyr)
+library(knitr)
+library(tidyverse) # load dplyr, ggplot2, stringr, etc.
+library(tmap)
+library(sf) # working with geographic simple features in R
+library(rnaturalearth) # World map data from Natural Earth
+library(countrycode) # get ISO code from country names
+library(ggrepel) # "ggplot2" extension for overlapping text labels
+library(viridis) # color palettes for "ggplot2")
+library(gridExtra) # arrange multiple grid-based plots on a page
+library(grid) # grid graphics system for R
+library(ggplot2) # create elegant data visualizations using the Grammar of Graphics
+```
+
+# Introduction
+
+## Objective
+
+To critically assess and enhance a static visualization of global happiness levels, identifying its strengths and weaknesses, and proposing improvements for a more interactive and insightful presentation.
+
+
+## Visualcapitalist's Global Happiness Levels Report
+
+Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)) serves as a vital tool. Initiated by the **United Nations Sustainable Development Solutions Network**, the WHR annually ranks countries based on the self-reported happiness of their citizens.
+
+The report utilizes data primarily sourced from the **Gallup World Poll** ([GWP](https://www.gallup.com/analytics/318875/global-research.aspx)), a sub-dataset of the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the **Cantril Ladder**. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
+
+The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+
+::: {#fig-Visualcapitalist-map layout-ncol=2}
+
+![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){width="75%" #fig-1}
+
+![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){width="75%" #fig-2}
+
+Visualcapitalist Global Happiness Levels Report
+
+:::
+
+## Weakness
+
+The original visualization has several weaknesses that limit its effectiveness in conveying the information to the audience. These weaknesses include:
+
+1.  **Lack of Interactivity**: The static nature of the world map limits the audience's ability to interact with the data and explore specific countries or regions in more detail. An interactive visualization would allow users to hover over countries to see detailed information and compare happiness scores across different years.
+
+2.  **Limited Context**: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tool-tips that explain the key variables influencing happiness levels would enhance the audience's understanding of the data.
+
+3.  **Inconsistent Labeling**:
+
+-   The labeling of happiness scores and name of countries are inconsistent in placement or are not displayed, making it challenging for the audience to quickly identify and compare scores across countries.
+-   A standardized labeling format would improve the readability and clarity of the visualization. In addition to this, there are countries' happiness scores that are not labeled due to the lack of space for example Cambodia and Laos, which may lead to confusion for the audience.
+-   Furthermore, the lack of pointers and inconsistent formatting severely affect readability for countries such Philippines and Indonesia have confusing unclear placements as to which country the label belongs to.
+
+4.  **Limited Historical Comparison**: The visualization only presents the happiness scores for the year 2024, without providing any historical comparison or trend analysis. Including data from previous years or a time slider feature would allow users to track changes in happiness levels over time and identify emerging patterns or trends.
+
+5.  **Limited Data Insights**: The visualization focuses solely on the happiness scores of countries without providing additional insights or analysis of the data. Including annotations, data summaries, or comparisons with other relevant metrics would enrich the audience's understanding of the factors influencing happiness levels.
+
+6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
+
+![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){width="75%"}
+
+7.  **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
+
+8.  **Incorrect Date for the Visualization**: The visualization is titled **"A Map of Global Happiness by Country in 2024"** but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
+
+
+# Methods
+
+## Data Sources
+
+World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide.
+Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
+
+## Data Understanding and Cleaning
+
+## Load Data
+
+```{r}
+df <- read_excel("data/DataForTable2.1.xls")
+```
+
+## List and Identify Missing Countries
+
+```{r}
+data(World)
+countries <- select(World, iso_a3, name)
+countries <- countries$name
+```
+
+
+```{r}
+# how many countries are missing in the dataset use Country name
+missing_countries <- setdiff(countries, unique(df$"Country name"))
+missing_countries
+```
+
+We can see that there are 34 countries missing from the dataset.
+
+## Data Cleaning and Transformation
+
+As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.
+
+### Filter data for years 2021 - 2023
+
+```{r, include=FALSE}
+df <- df %>%
+  filter(year %in% c(2021, 2022, 2023))
+```
+
+### Renaming headers and keeping only the necessary columns
+
+```{r, include=FALSE}
+# Rename the columns
+colnames(df) <- c("country", "year", "score", colnames(df)[4:ncol(df)])
+
+# Keep only the specified columns
+df <- df[, c("country", "year", "score")]
+```
+
+### Include Missing Countries with NA Scores
+
+```{r, include=FALSE}
+# List of all countries in your data
+all_countries <- unique(df$country)
+
+# List of years to ensure each country has entries for each year
+years <- c(2021, 2022, 2023)
+
+# Create a data frame with all combinations of countries and years
+complete_df <- expand.grid(country = all_countries, year = years)
+
+# Add country codes to the complete data frame
+complete_df$country_code <- countrycode(complete_df$country, origin = "country.name", destination = "iso3c")
+
+# Merge the complete data frame with the original data
+df_combined <- left_join(complete_df, df, by = c("country", "year"))
+
+# Calculate the mean score for each country
+country_means <- df_combined %>%
+  group_by(country) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE))
+
+# Merge the country means back into the combined data
+df_combined <- left_join(df_combined, country_means, by = "country")
+
+# Fill any remaining NA values with the mean score of the respective country
+df_combined <- df_combined %>%
+  mutate(score = ifelse(is.na(score), mean_score, score))
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Inspect the data for missing scores
+print(missing_scores)
+```
+
+```{r, include=FALSE}
+region <- read_csv("data/world-regions-according-to-the-world-bank.csv")
+# head(region)
+
+df_combined <- left_join(df_combined, region, by = c("country_code" = "Code"))
+# find empty rows in "World Region according to the World Bank"
+
+missing_region <- df_combined %>% filter(is.na(`World Region according to the World Bank`))
+# print(missing_region)
+
+# put taiwan within china
+df_combined$`World Region according to the World Bank`[which(df_combined$country == "Taiwan Province of China")] <- "East Asia and Pacific"
+
+df_combined$`World Region according to the World Bank`[which(df_combined$`World Region according to the World Bank` == "North America")] <- "Latin America and Caribbean"
+
+df_combined$`World Region according to the World Bank`[which(df_combined$`World Region according to the World Bank` == "Latin America and Caribbean")] <- "Americas"
+```
+
+## Data Visualization
+
+### Create violin plot
+
+```{r, fig.width=10, fig.align='center'}
+# Create the violin plot with boxplots
+base_plot <- ggplot(df_combined, aes(y = `World Region according to the World Bank`, x = score, fill = `World Region according to the World Bank`)) +
+  geom_violin(trim = TRUE) +  # Create horizontal violin plots
+  geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
+  scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +  # Set the x-axis limits and breaks
+  scale_fill_viridis(discrete = TRUE, guide = FALSE) +  # Use viridis color scale for discrete data and remove legend
+  labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
+  theme_minimal() +  # Use a minimal theme
+  theme(
+    plot.title = element_text(hjust = 0.5)  # Center the plot title
+  )
+
+# Highlight the top and bottom of each region with text labels of the respective country
+highlight_data <- df_combined %>%
+  group_by(`World Region according to the World Bank`) %>%
+  filter(score == max(score) | score == min(score))
+
+# Add the highlighted points and text labels to the base plot
+final_plot <- base_plot +
+  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, color = score), size = 3) +
+  geom_text_repel(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, label = country),
+                  nudge_x = ifelse(highlight_data$score >= mean(highlight_data$score), 1, -1), nudge_y = 0.3, direction = "y") +
+  scale_color_viridis_c(option = "plasma", na.value = "grey90") +
+  labs(title = "Happiness Scores by World Region (2021-2023)\nwith Top and Bottom Countries Highlighted")
+
+# Print the final plot
+print(final_plot)
+
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sf)
+library(rnaturalearth)
+library(viridis)
+library(plotly)
+
+# Create bins for the scores with 0.5 intervals
+bins <- seq(0, 10, by = 0.5)
+labels <- paste0(bins[-length(bins)], "-", bins[-1])
+df_combined <- df_combined %>%
+  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Get world data
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+# Create a function to generate data for each year
+data_for_year <- function(year) {
+  df_year <- df_combined %>% filter(year == !!year)
+  
+  df_avg <- df_year %>%
+    group_by(country_code) %>%
+    summarize(avg_score = mean(score, na.rm = TRUE))
+  
+  left_join(world, df_avg, by = c("iso_a3" = "country_code"))
+}
+
+# Prepare the data for all years
+years <- unique(df_combined$year)
+world_data_list <- lapply(years, data_for_year)
+
+# Create the initial plot for the first year
+initial_year <- years[1]
+world_data_avg <- world_data_list[[1]]
+
+p <- ggplot() +
+  geom_sf(data = world_data_avg, aes(fill = avg_score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Average Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = paste("World Map of Happiness - Year", initial_year), fill = "Average Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+
+# Convert the ggplot to plotly
+fig <- ggplotly(p)
+
+# Add the slider for years
+fig <- fig %>%
+  layout(
+    sliders = list(
+      list(
+        active = 0,
+        currentvalue = list(prefix = "Year: "),
+        pad = list(t = 50),
+        steps = lapply(1:length(years), function(i) {
+          list(
+            method = "restyle",
+            args = list(list(
+              "fill" = list(lapply(1:length(years), function(x) {
+                if (x == i) return(world_data_list[[x]]$avg_score) else return(NULL)
+              }))
+            )),
+            label = years[i]
+          )
+        })
+      )
+    )
+  )
+
+fig
+
+```
+
+### World Map
+
+```{r}
+# Create bins for the scores with 0.5 intervals
+bins <- seq(0, 10, by = 0.5)
+labels <- paste0(bins[-length(bins)], "-", bins[-1])
+df_combined <- df_combined %>%
+  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
+
+# Check for any remaining missing values
+missing_scores <- df_combined %>% filter(is.na(score))
+if (nrow(missing_scores) > 0) {
+  warning("There are still countries with missing scores.")
+}
+
+# Inspect the data for missing scores
+# print(missing_scores)
+
+# Get world data
+world <- ne_countries(scale = "small", returnclass = "sf")
+
+# Compute the average score for each country over the years
+df_avg <- df_combined %>%
+  group_by(country_code) %>%
+  summarize(avg_score = mean(score, na.rm = TRUE))
+
+# Merge world data with the average scores
+world_data_avg <- left_join(world, df_avg, by = c("iso_a3" = "country_code"))
+
+# Check for missing data after the join
+missing_world_avg <- world_data_avg %>% filter(is.na(avg_score))
+
+# print(missing_world_avg)
+
+# Plot the average data
+ggplot() +
+  geom_sf(data = world_data_avg, aes(fill = avg_score), color = "black") +
+  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Average Score") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  labs(title = "World Map of Happiness - Average (2021-2023)", fill = "Average Score") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_sf(crs = "+proj=robin")
+```
+
+### Distribution Chart of Scores
+
+```{r}
+ggplot(df_combined, aes(x = score)) +
+  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
+  geom_density(aes(y = 0.5 * ..count..), color = "red", size = 1, linetype = "dotted") +
+  stat_bin(binwidth = 0.5, geom = "text", aes(label = ifelse(..count.. > 0, ..count.., "")), vjust = -0.5, color = "black", position = position_stack(vjust = 1.0)) +
+  scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(title = "Distribution of Happiness Scores (2021-2023)",
+       x = "Happiness Score",
+       y = "Count") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+Overall:
+
+The distribution suggests that while there is a central tendency around a happiness score of 6, there is considerable variability in happiness scores among countries, with more countries experiencing moderate to low levels of happiness.
+
+Distribution Shape:
+
+The distribution of happiness scores is approximately normal with a slight positive skew. This means most countries have happiness scores clustered around the middle range (4 to 6), but there are more countries with lower scores than higher scores.
+
+
+## Critical Assessment and Proposed Improvements
+::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
+
+1. Interactive Data Visualization:
+- Implement hover-over information for detailed country data.
+- Add filtering and sorting capabilities.
+- Include historical comparison using a time slider.
+
+2. Consistent Labeling and Annotations:
+- Standardize labeling format for readability.
+- Provide annotations explaining key variables influencing happiness.
+
+3. Accessible Design:
+- Ensure a user-friendly interface.
+- Use color schemes accessible to color-blind users.
+
+4. Data Insights and Analysis:
+- Provide summaries and comparisons with relevant metrics.
+- Enhance linear scale visualization for regional comparisons.
+
+These methods aim to create an improved, interactive visualization of global happiness levels, offering better insights and user engagement.
+
+:::
+
+
+# Findings
+
+## New World Map
+
+
+## Happiness Score By World Region
+
+
+
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri.
+
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut.
+
+| Lorem ipsum dolor sit. | Lorem ipsum. | Lorem ipsum. |
+|------------------------|--------------|--------------|
+| Lorem ipsum dolor.     | Lorem ipsum. | $\alpha$     |
+| Lorem ipsum.           | Lorem ipsum. | $\beta$      |
+| Lorem.                 | Lorem.       | $\gamma$     |
+| Lorem ipsum dolor.     | Lorem.       | $\theta$     |
+
+: Lorem ipsum dolor sit amet {#tbl-1}
+
+Lorem @tbl-1 ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
+
+## Lorem ipsum dolor sit amet
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre.
+
+![Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.](./images/Standard_lettering.png){width="100%"}
+
+# Findings
+
+::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplifi- carique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
+
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+
+:::
+
+## Lorem ipsum etiam
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. 
+
+# Conclusion
+
+Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. 
+
+![Temperature and ozone level](images/fig-airquality-1.svg)
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
+
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+  - Lorem ipsum dolor sit amet.
+  -  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+  - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed. 
+  - Lorem ipsum dolor sit amet, consectetur adipiscing.
+
+$$
+\sum_(k=1)^n k = \frac{(n(n+1))}{2} = \frac{(n^2 + n)}{2}
+$$
+
+# Acknowledgement
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
+
