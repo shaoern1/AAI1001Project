@@ -54,23 +54,55 @@ library(ggplot2) # create elegant data visualizations using the Grammar of Graph
 
 To critically assess and enhance a static visualization of global happiness levels, identifying its strengths and weaknesses, and proposing improvements for a more interactive and insightful presentation.
 
+## Global Happiness Score
+
+The Life Ladder score, also known as the World Happiness Score, is derived from the Gallup World Poll data. The score is typically calculated based on several key variables that reflect the well-being and quality of life in different countries. Here’s a general outline of the formula and components involved in calculating the World Happiness Score:
+
+| **Component**                  | **Description**                                                                                                                                                   |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Life Evaluations (Ladder Question) | Respondents are asked to evaluate their current life on a scale from 0 to 10, where 0 represents the worst possible life and 10 represents the best possible life. |
+| GDP per Capita                 | The natural logarithm of GDP per capita (in Purchasing Power Parity terms).                                                                                       |
+| Social Support                 | The presence of social support networks, measured by the binary response to the question: "If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?" |
+| Healthy Life Expectancy        | Life expectancy at birth, reflecting the overall health of the population.                                                                                        |
+| Freedom to Make Life Choices   | The perceived freedom to make life decisions, measured by the binary response to the question: "Are you satisfied or dissatisfied with your freedom to choose what you do with your life?"                 |
+| Generosity                     | Measured by responses to the question: "Have you donated money to a charity in the past month?" adjusted for GDP per capita.                                      |
+| Perceptions of Corruption      | The perceived level of corruption in government and business, based on responses to the questions about corruption.                                               |
+| Positive and Negative Affect   | Affect balance is measured based on the average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
+
+The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country. The formula for the World Happiness Score can be represented as follows:
+
+$$
+\begin{equation}
+\begin{aligned}
+\text{Happiness Score} = & \ \beta_0 \\
+& + \beta_1 \times (\text{Log GDP per capita}) \\
+& + \beta_2 \times (\text{Social Support}) \\
+& + \beta_3 \times (\text{Healthy Life Expectancy}) \\
+& + \beta_4 \times (\text{Freedom to Make Life Choices}) \\
+& + \beta_5 \times (\text{Generosity}) \\
+& + \beta_6 \times (\text{Perceptions of Corruption}) \\
+& + \beta_7 \times (\text{Positive Affect}) \\
+& - \beta_8 \times (\text{Negative Affect}) \\
+\end{aligned}
+\end{equation}
+$$
+
+Where $\beta_0$ to $\beta_8$ are coefficients derived from regression analysis based on historical data.
+
 
 ## Visualcapitalist's Global Happiness Levels Report
-
 Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)) serves as a vital tool. Initiated by the **United Nations Sustainable Development Solutions Network**, the WHR annually ranks countries based on the self-reported happiness of their citizens.
 
 The report utilizes data primarily sourced from the **Gallup World Poll** ([GWP](https://www.gallup.com/analytics/318875/global-research.aspx)), a sub-dataset of the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the **Cantril Ladder**. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
 
 The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
 
-::: {#fig-Visualcapitalist-map layout-ncol=2}
+::: {#fig-Visualcapitalist-map layout-ncol="2"}
+![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){#fig-1 width="75%"}
 
-![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){width="75%" #fig-1}
-
-![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){width="75%" #fig-2}
+![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){#fig-2 width="75%"}
 
 Visualcapitalist Global Happiness Levels Report
-
 :::
 
 ## Weakness
@@ -99,13 +131,11 @@ The original visualization has several weaknesses that limit its effectiveness i
 
 8.  **Incorrect Date for the Visualization**: The visualization is titled **"A Map of Global Happiness by Country in 2024"** but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
 
-
 # Methods
 
 ## Data Sources
 
-World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide.
-Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
+World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide. Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
 
 ## Data Understanding and Cleaning
 
@@ -122,7 +152,6 @@ data(World)
 countries <- select(World, iso_a3, name)
 countries <- countries$name
 ```
-
 
 ```{r}
 # how many countries are missing in the dataset use Country name
@@ -397,47 +426,44 @@ Distribution Shape:
 
 The distribution of happiness scores is approximately normal with a slight positive skew. This means most countries have happiness scores clustered around the middle range (4 to 6), but there are more countries with lower scores than higher scores.
 
-
 ## Critical Assessment and Proposed Improvements
+
 ::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
+1.  Interactive Data Visualization:
 
-1. Interactive Data Visualization:
-- Implement hover-over information for detailed country data.
-- Add filtering and sorting capabilities.
-- Include historical comparison using a time slider.
+-   Implement hover-over information for detailed country data.
+-   Add filtering and sorting capabilities.
+-   Include historical comparison using a time slider.
 
-2. Consistent Labeling and Annotations:
-- Standardize labeling format for readability.
-- Provide annotations explaining key variables influencing happiness.
+2.  Consistent Labeling and Annotations:
 
-3. Accessible Design:
-- Ensure a user-friendly interface.
-- Use color schemes accessible to color-blind users.
+-   Standardize labeling format for readability.
+-   Provide annotations explaining key variables influencing happiness.
 
-4. Data Insights and Analysis:
-- Provide summaries and comparisons with relevant metrics.
-- Enhance linear scale visualization for regional comparisons.
+3.  Accessible Design:
+
+-   Ensure a user-friendly interface.
+-   Use color schemes accessible to color-blind users.
+
+4.  Data Insights and Analysis:
+
+-   Provide summaries and comparisons with relevant metrics.
+-   Enhance linear scale visualization for regional comparisons.
 
 These methods aim to create an improved, interactive visualization of global happiness levels, offering better insights and user engagement.
-
 :::
-
 
 # Findings
 
 ## New World Map
 
-
 ## Happiness Score By World Region
-
-
-
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri.
 
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+1.  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+2.  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+3.  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut.
 
@@ -461,35 +487,33 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 # Findings
 
 ::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
-
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplifi- carique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
 
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-
+-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
 :::
 
 ## Lorem ipsum etiam
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur.
 
 # Conclusion
 
 Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur.
 
 ![Temperature and ozone level](images/fig-airquality-1.svg)
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
 
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-  - Lorem ipsum dolor sit amet.
-  -  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
-  - Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed. 
-  - Lorem ipsum dolor sit amet, consectetur adipiscing.
+-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
+    -   Lorem ipsum dolor sit amet.
+    -   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+-   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+    -   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.
+    -   Lorem ipsum dolor sit amet, consectetur adipiscing.
 
 $$
 \sum_(k=1)^n k = \frac{(n(n+1))}{2} = \frac{(n^2 + n)}{2}
@@ -498,4 +522,3 @@ $$
 # Acknowledgement
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
-

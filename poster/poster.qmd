@@ -53,6 +53,35 @@ library(ggplot2) # create elegant data visualizations using the Grammar of Graph
 
 To critically assess and enhance a static visualization of global happiness levels, identifying its strengths and weaknesses, and proposing improvements for a more interactive and insightful presentation.
 
+## Global Happiness Score
+
+The Life Ladder score, also known as the World Happiness Score, is derived from the Gallup World Poll data. The score is typically calculated based on several key variables that reflect the well-being and quality of life in different countries. Here’s a general outline of the formula and components involved in calculating the World Happiness Score:
+
+| **Component** | **Description** |
+|---------------|-----------------|
+| Life Evaluations (Ladder Question) | Respondents rate their current life from 0 (worst) to 10 (best). |
+| GDP per Capita | Natural logarithm of GDP per capita (PPP terms). |
+| Social Support | Binary response to: "Do you have relatives or friends you can count on for help if needed?" |
+| Healthy Life Expectancy | Life expectancy at birth.|
+| Freedom to Make Life Choices | Binary response to: "Are you satisfied with your freedom to choose what you do with your life?" |
+| Generosity | Donations to charity in the past month, adjusted for GDP per capita |
+| Perceptions of Corruption | Perceived corruption in government and business. |
+| Positive and Negative Affect | Average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
+
+The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country. The formula for the World Happiness Score can be represented as follows:
+
+$$
+\begin{equation}
+\begin{aligned}
+\text{Happiness Score} = & \ \beta_0 + \beta_1 \times (\text{Log GDP per capita}) \\
+& + \beta_2 \times (\text{Social Support}) + \beta_3 \times (\text{Healthy Life Expectancy}) \\
+& + \beta_4 \times (\text{Freedom to Make Life Choices}) + \beta_5 \times (\text{Generosity}) \\
+& + \beta_6 \times (\text{Perceptions of Corruption}) + \beta_7 \times (\text{Positive Affect}) - \beta_8 \times (\text{Negative Affect}) \\
+\end{aligned}
+\end{equation}
+$$
+
+Where $\beta_0$ to $\beta_8$ are coefficients derived from regression analysis based on historical data.
 
 ## Visualcapitalist's Global Happiness Levels Report
 
