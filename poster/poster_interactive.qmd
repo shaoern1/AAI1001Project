@@ -31,13 +31,16 @@ if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
 if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
 if (!require("grid")) install.packages("grid", dependencies = TRUE)
 if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+if (!require("shiny")) install.packages("shiny", dependencies = TRUE)
 
+library(shiny)
 library(scales)
 library(readxl)
 library(dplyr)
 library(knitr)
 library(tidyverse) # load dplyr, ggplot2, stringr, etc.
 library(tmap)
+library(plotly) # create interactive web-based graphics via plotly.js)
 library(sf) # working with geographic simple features in R
 library(rnaturalearth) # World map data from Natural Earth
 library(countrycode) # get ISO code from country names
@@ -48,143 +51,26 @@ library(grid) # grid graphics system for R
 library(ggplot2) # create elegant data visualizations using the Grammar of Graphics
 ```
 
-# Introduction
 
-## Objective
-
-To critically assess and enhance a static visualization of global happiness levels, identifying its strengths and weaknesses, and proposing improvements for a more interactive and insightful presentation.
-
-## Global Happiness Score
-
-The Life Ladder score, also known as the World Happiness Score, is derived from the Gallup World Poll data. The score is typically calculated based on several key variables that reflect the well-being and quality of life in different countries. Here’s a general outline of the formula and components involved in calculating the World Happiness Score:
-
-| **Component**                  | **Description**                                                                                                                                                   |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Life Evaluations (Ladder Question) | Respondents are asked to evaluate their current life on a scale from 0 to 10, where 0 represents the worst possible life and 10 represents the best possible life. |
-| GDP per Capita                 | The natural logarithm of GDP per capita (in Purchasing Power Parity terms).                                                                                       |
-| Social Support                 | The presence of social support networks, measured by the binary response to the question: "If you were in trouble, do you have relatives or friends you can count on to help you whenever you need them, or not?" |
-| Healthy Life Expectancy        | Life expectancy at birth, reflecting the overall health of the population.                                                                                        |
-| Freedom to Make Life Choices   | The perceived freedom to make life decisions, measured by the binary response to the question: "Are you satisfied or dissatisfied with your freedom to choose what you do with your life?"                 |
-| Generosity                     | Measured by responses to the question: "Have you donated money to a charity in the past month?" adjusted for GDP per capita.                                      |
-| Perceptions of Corruption      | The perceived level of corruption in government and business, based on responses to the questions about corruption.                                               |
-| Positive and Negative Affect   | Affect balance is measured based on the average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
-
-The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country. The formula for the World Happiness Score can be represented as follows:
-
-$$
-\begin{equation}
-\begin{aligned}
-\text{Happiness Score} = & \ \beta_0 \\
-& + \beta_1 \times (\text{Log GDP per capita}) \\
-& + \beta_2 \times (\text{Social Support}) \\
-& + \beta_3 \times (\text{Healthy Life Expectancy}) \\
-& + \beta_4 \times (\text{Freedom to Make Life Choices}) \\
-& + \beta_5 \times (\text{Generosity}) \\
-& + \beta_6 \times (\text{Perceptions of Corruption}) \\
-& + \beta_7 \times (\text{Positive Affect}) \\
-& - \beta_8 \times (\text{Negative Affect}) \\
-\end{aligned}
-\end{equation}
-$$
-
-Where $\beta_0$ to $\beta_8$ are coefficients derived from regression analysis based on historical data.
-
-
-## Visualcapitalist's Global Happiness Levels Report
-Happiness levels across the globe are a complex interplay of economic, social, psychological, and environmental factors that contribute to an individual's sense of well-being. To quantitatively assess and compare these levels internationally, the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)) serves as a vital tool. Initiated by the **United Nations Sustainable Development Solutions Network**, the WHR annually ranks countries based on the self-reported happiness of their citizens.
-
-The report utilizes data primarily sourced from the **Gallup World Poll** ([GWP](https://www.gallup.com/analytics/318875/global-research.aspx)), a sub-dataset of the World Happiness Report, which asks respondents to evaluate their current lives on a scale from 0 to 10, known as the **Cantril Ladder**. This evaluation is supported by key variables that are believed to contribute to life satisfaction: GDP per capita, social support, healthy life expectancy, personal freedom, generosity, and perceptions of corruption.
-
-The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
-
-::: {#fig-Visualcapitalist-map layout-ncol="2"}
-![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){#fig-1 width="75%"}
-
-![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){#fig-2 width="75%"}
-
-Visualcapitalist Global Happiness Levels Report
-:::
-
-## Weakness
-
-The original visualization has several weaknesses that limit its effectiveness in conveying the information to the audience. These weaknesses include:
-
-1.  **Lack of Interactivity**: The static nature of the world map limits the audience's ability to interact with the data and explore specific countries or regions in more detail. An interactive visualization would allow users to hover over countries to see detailed information and compare happiness scores across different years.
-
-2.  **Limited Context**: While the color gradient provides a general overview of happiness levels, the visualization lacks additional context or explanations of the factors contributing to these scores. Including annotations or tool-tips that explain the key variables influencing happiness levels would enhance the audience's understanding of the data.
-
-3.  **Inconsistent Labeling**:
-
--   The labeling of happiness scores and name of countries are inconsistent in placement or are not displayed, making it challenging for the audience to quickly identify and compare scores across countries.
--   A standardized labeling format would improve the readability and clarity of the visualization. In addition to this, there are countries' happiness scores that are not labeled due to the lack of space for example Cambodia and Laos, which may lead to confusion for the audience.
--   Furthermore, the lack of pointers and inconsistent formatting severely affect readability for countries such Philippines and Indonesia have confusing unclear placements as to which country the label belongs to.
-
-4.  **Limited Historical Comparison**: The visualization only presents the happiness scores for the year 2024, without providing any historical comparison or trend analysis. Including data from previous years or a time slider feature would allow users to track changes in happiness levels over time and identify emerging patterns or trends.
-
-5.  **Limited Data Insights**: The visualization focuses solely on the happiness scores of countries without providing additional insights or analysis of the data. Including annotations, data summaries, or comparisons with other relevant metrics would enrich the audience's understanding of the factors influencing happiness levels.
-
-6.  **Color Blindness**: The color gradient used in the visualization may not be accessible to color-blind users, as certain color combinations may be difficult to distinguish. Using color schemes that are accessible to users with color vision deficiencies would improve the inclusivity of the visualization.
-
-![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){width="75%"}
-
-7.  **Linear Scale**: The linear scale at the bottom of the region map is poorly visualized and does not provide a distinct separation and vivid depiction between the countries. This further worsened by the clustering and overlapping of icons, makes it difficult for the audience to interpret and compare the happiness scores of each country within the region.
-
-8.  **Incorrect Date for the Visualization**: The visualization is titled **"A Map of Global Happiness by Country in 2024"** but the data is from 2023. This inconsistency may lead to confusion among the audience and affect the credibility of the visualization.
-
-# Methods
-
-## Data Sources
-
-World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide. Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
-
-## Data Understanding and Cleaning
-
-## Load Data
-
-```{r}
+```{r, include=FALSE}
 df <- read_excel("data/DataForTable2.1.xls")
-```
-
-## List and Identify Missing Countries
-
-```{r}
 data(World)
+
 countries <- select(World, iso_a3, name)
 countries <- countries$name
-```
 
-```{r}
 # how many countries are missing in the dataset use Country name
 missing_countries <- setdiff(countries, unique(df$"Country name"))
-missing_countries
-```
 
-We can see that there are 34 countries missing from the dataset.
-
-## Data Cleaning and Transformation
-
-As we will be only using data from 2021 - 2023, we will filter out the data from other years. We will also check for missing data and fill in the missing values with the mean of the available data from each country.
-
-### Filter data for years 2021 - 2023
-
-```{r, include=FALSE}
 df <- df %>%
   filter(year %in% c(2021, 2022, 2023))
-```
 
-### Renaming headers and keeping only the necessary columns
-
-```{r, include=FALSE}
 # Rename the columns
 colnames(df) <- c("country", "year", "score", colnames(df)[4:ncol(df)])
 
 # Keep only the specified columns
 df <- df[, c("country", "year", "score")]
-```
 
-### Include Missing Countries with NA Scores
-
-```{r, include=FALSE}
 # List of all countries in your data
 all_countries <- unique(df$country)
 
@@ -218,11 +104,6 @@ if (nrow(missing_scores) > 0) {
   warning("There are still countries with missing scores.")
 }
 
-# Inspect the data for missing scores
-print(missing_scores)
-```
-
-```{r, include=FALSE}
 region <- read_csv("data/world-regions-according-to-the-world-bank.csv")
 # head(region)
 
@@ -240,123 +121,265 @@ df_combined$`World Region according to the World Bank`[which(df_combined$`World 
 df_combined$`World Region according to the World Bank`[which(df_combined$`World Region according to the World Bank` == "Latin America and Caribbean")] <- "Americas"
 ```
 
-## Data Visualization
 
-### Create violin plot
+# Introduction
 
-```{r, fig.width=10, fig.align='center'}
-# Create the violin plot with boxplots
-base_plot <- ggplot(df_combined, aes(y = `World Region according to the World Bank`, x = score, fill = `World Region according to the World Bank`)) +
-  geom_violin(trim = TRUE) +  # Create horizontal violin plots
-  geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
-  scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +  # Set the x-axis limits and breaks
-  scale_fill_viridis(discrete = TRUE, guide = FALSE) +  # Use viridis color scale for discrete data and remove legend
-  labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
-  theme_minimal() +  # Use a minimal theme
-  theme(
-    plot.title = element_text(hjust = 0.5)  # Center the plot title
-  )
+## Global Happiness Score
 
-# Highlight the top and bottom of each region with text labels of the respective country
-highlight_data <- df_combined %>%
-  group_by(`World Region according to the World Bank`) %>%
-  filter(score == max(score) | score == min(score))
+The Life Ladder score, also known as the World Happiness Score, is derived from the Gallup World Poll data. The score is typically calculated based on several key variables that reflect the well-being and quality of life in different countries. Here’s a general outline of the formula and components involved in calculating the World Happiness Score:
 
-# Add the highlighted points and text labels to the base plot
-final_plot <- base_plot +
-  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, color = score), size = 3) +
-  geom_text_repel(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, label = country),
-                  nudge_x = ifelse(highlight_data$score >= mean(highlight_data$score), 1, -1), nudge_y = 0.3, direction = "y") +
-  scale_color_viridis_c(option = "plasma", na.value = "grey90") +
-  labs(title = "Happiness Scores by World Region (2021-2023)\nwith Top and Bottom Countries Highlighted")
+| **Component** | **Description** |
+|---------------|-----------------|
+| Life Evaluations (Ladder Question) | Respondents rate their current life from 0 (worst) to 10 (best). |
+| GDP per Capita | Natural logarithm of GDP per capita (PPP terms). |
+| Social Support | Binary response to: "Do you have relatives or friends you can count on for help if needed?" |
+| Healthy Life Expectancy | Life expectancy at birth.|
+| Freedom to Make Life Choices | Binary response to: "Are you satisfied with your freedom to choose what you do with your life?" |
+| Generosity | Donations to charity in the past month, adjusted for GDP per capita |
+| Perceptions of Corruption | Perceived corruption in government and business. |
+| Positive and Negative Affect | Average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
 
-# Print the final plot
-print(final_plot)
+The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country. The formula for the World Happiness Score can be represented as follows:
 
-```
+$$
+\begin{equation}
+\begin{aligned}
+\text{Happiness Score} = & \ \beta_0 + \beta_1 \times (\text{Log GDP per capita}) \\
+& + \beta_2 \times (\text{Social Support}) + \beta_3 \times (\text{Healthy Life Expectancy}) \\
+& + \beta_4 \times (\text{Freedom to Make Life Choices}) + \beta_5 \times (\text{Generosity}) \\
+& + \beta_6 \times (\text{Perceptions of Corruption}) + \beta_7 \times (\text{Positive Affect}) - \beta_8 \times (\text{Negative Affect}) \\
+\end{aligned}
+\end{equation}
+$$
 
+Where $\beta_0$ to $\beta_8$ are coefficients derived from regression analysis based on historical data.
+
+## Visualcapitalist's Global Happiness Levels Report
+
+The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+
+::: {#fig-Visualcapitalist-map layout-ncol="2"}
+![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){#fig-1 width="75%"}
+
+![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){#fig-2 width="75%"}
+
+Visualcapitalist Global Happiness Levels Report
+:::
+
+# Methods
+
+## Data Sources
+
+World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide. Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
+
+## Interactive Globe
 ```{r}
-library(dplyr)
-library(ggplot2)
-library(sf)
-library(rnaturalearth)
-library(viridis)
-library(plotly)
-
-# Create bins for the scores with 0.5 intervals
-bins <- seq(0, 10, by = 0.5)
-labels <- paste0(bins[-length(bins)], "-", bins[-1])
-df_combined <- df_combined %>%
-  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
-
-# Check for any remaining missing values
-missing_scores <- df_combined %>% filter(is.na(score))
-if (nrow(missing_scores) > 0) {
-  warning("There are still countries with missing scores.")
-}
-
-# Get world data
-world <- ne_countries(scale = "small", returnclass = "sf")
-
-# Create a function to generate data for each year
-data_for_year <- function(year) {
-  df_year <- df_combined %>% filter(year == !!year)
-  
-  df_avg <- df_year %>%
-    group_by(country_code) %>%
-    summarize(avg_score = mean(score, na.rm = TRUE))
-  
-  left_join(world, df_avg, by = c("iso_a3" = "country_code"))
-}
-
-# Prepare the data for all years
-years <- unique(df_combined$year)
-world_data_list <- lapply(years, data_for_year)
-
-# Create the initial plot for the first year
-initial_year <- years[1]
-world_data_avg <- world_data_list[[1]]
-
-p <- ggplot() +
-  geom_sf(data = world_data_avg, aes(fill = avg_score), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Average Score") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = paste("World Map of Happiness - Year", initial_year), fill = "Average Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-
-# Convert the ggplot to plotly
-fig <- ggplotly(p)
-
-# Add the slider for years
-fig <- fig %>%
+# create the bin globe with time slider using plotly in R using plot_geo and represent using plasma color scale
+df_combined %>%
+  plot_geo(
+    locationmode = "ISO-3",
+    locations = ~country_code,
+    z = ~score,
+    color = ~score,
+    colors = "plasma",
+    marker = list(line = list(color = "black", width = 0.5)),
+    frame = ~year,
+    text = ~paste("Country: ", country, "<br>Score: ", score),
+    hoverinfo = "text"
+  ) %>%
+  colorbar(title = "Happiness Score") %>%
   layout(
-    sliders = list(
+    title = "Global Happiness Index (2021-2023)",
+    geo = list(
+      showframe = FALSE,
+      showcoastlines = FALSE,
+      projection = list(type = "orthographic"),
+      showocean = TRUE,
+      oceancolor = "lightblue"
+    ),
+    updatemenus = list(
       list(
-        active = 0,
-        currentvalue = list(prefix = "Year: "),
-        pad = list(t = 50),
-        steps = lapply(1:length(years), function(i) {
+        buttons = list(
           list(
-            method = "restyle",
-            args = list(list(
-              "fill" = list(lapply(1:length(years), function(x) {
-                if (x == i) return(world_data_list[[x]]$avg_score) else return(NULL)
-              }))
-            )),
-            label = years[i]
+            args = list(
+              frame = list(duration = 1000, redraw = TRUE),
+              fromcurrent = TRUE
+            ),
+            label = "Play",
+            method = "animate"
+          ),
+          list(
+            args = list(
+              frame = list(duration = 0, redraw = TRUE),
+              mode = "immediate"
+            ),
+            label = "Pause",
+            method = "animate"
           )
-        })
+        ),
+        direction = "left",
+        pad = list(r = 10, t = 87),
+        showactive = FALSE,
+        type = "buttons",
+        x = 0.1,
+        xanchor = "right",
+        y = 0,
+        yanchor = "top"
       )
     )
   )
+```
 
-fig
+## Pridiction of Happiness Score
+
+The happiness score will be predicted based on the following variables: GDP per Capita, Social Support, Healthy Life Expectancy, Freedom to Make Life Choices, Generosity, Perceptions of Corruption, Positive Affect, and Negative Affect. The prediction will be based on a regression model using historical data from the World Happiness Report.
+
+### Precompute Model Coefficients in R
+
+```{r}
+# Load the data
+df_happiness <- read_excel("data/DataForTable2.1.xls")
+
+# convert column names to snake case
+colnames(df_happiness) <- tolower(colnames(df_happiness))
+
+# Rename all columns
+colnames(df_happiness) <- c("country", "year", "score", "gdp_per_capita", "social_support", "healthy_life_expectancy", "freedom_to_make_life_choices", "generosity", "perceptions_of_corruption", "positive_affect", "negative_affect")
+
+model <- lm(score ~ gdp_per_capita + social_support + healthy_life_expectancy + freedom_to_make_life_choices + generosity + perceptions_of_corruption + positive_affect + negative_affect, data = df_happiness)
+
+coefficients <- coef(model)
+coefficients
+```
+
+### Try Out
+```{=html}
+<style>
+  .container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 600px;
+    width: 100%;
+  }
+  .header {
+    text-align: center;
+    color: #333333;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555555;
+  }
+  .form-input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  .btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  .btn:hover {
+    background-color: #45a049;
+  }
+  .result-text {
+    text-align: center;
+    font-size: 18px;
+    color: #333333;
+    font-weight: bold;
+  }
+</style>
+<script type="text/javascript">
+  // Model coefficients obtained from R
+  const coefficients = {
+    intercept: `r coefficients[1]`,
+    gdp_per_capita: `r coefficients["gdp_per_capita"]`,
+    social_support: `r coefficients["social_support"]`,
+    healthy_life_expectancy: `r coefficients["healthy_life_expectancy"]`,
+    freedom_to_make_life_choices: `r coefficients["freedom_to_make_life_choices"]`,
+    generosity: `r coefficients["generosity"]`,
+    perceptions_of_corruption: `r coefficients["perceptions_of_corruption"]`,
+    positive_affect: `r coefficients["positive_affect"]`,
+    negative_affect: `r coefficients["negative_affect"]`
+  };
+
+  function predictHappiness() {
+    // Get input values
+    const gdp_per_capita = parseFloat(document.getElementById("gdp_per_capita").value);
+    const social_support = parseFloat(document.getElementById("social_support").value);
+    const healthy_life_expectancy = parseFloat(document.getElementById("healthy_life_expectancy").value);
+    const freedom = parseFloat(document.getElementById("freedom").value);
+    const generosity = parseFloat(document.getElementById("generosity").value);
+    const corruption = parseFloat(document.getElementById("corruption").value);
+    const positive_affect = parseFloat(document.getElementById("positive_affect").value);
+    const negative_affect = parseFloat(document.getElementById("negative_affect").value);
+
+    // Calculate predicted happiness score
+    const predictedScore = coefficients.intercept +
+      coefficients.gdp_per_capita * gdp_per_capita +
+      coefficients.social_support * social_support +
+      coefficients.healthy_life_expectancy * healthy_life_expectancy +
+      coefficients.freedom_to_make_life_choices * freedom +
+      coefficients.generosity * generosity +
+      coefficients.perceptions_of_corruption * corruption +
+      coefficients.positive_affect * positive_affect +
+      coefficients.negative_affect * negative_affect;
+
+    // Display the result
+    document.getElementById("prediction_result").innerText = "Predicted Happiness Score: " + predictedScore.toFixed(2);
+  }
+</script>
+<div class="container">
+  <h1 class="header">Happiness Score Predictor</h1>
+  <div class="form-group">
+    <label for="gdp_per_capita" class="form-label">GDP per capita:</label>
+    <input type="number" id="gdp_per_capita" step="0.1" value="1.0" class="form-input"><br>
+
+    <label for="social_support" class="form-label">Social support:</label>
+    <input type="number" id="social_support" step="0.1" value="0.8" class="form-input"><br>
+
+    <label for="healthy_life_expectancy" class="form-label">Healthy life expectancy at birth:</label>
+    <input type="number" id="healthy_life_expectancy" step="0.1" value="70" class="form-input"><br>
+
+    <label for="freedom" class="form-label">Freedom to make life choices:</label>
+    <input type="number" id="freedom" step="0.1" value="0.6" class="form-input"><br>
+
+    <label for="generosity" class="form-label">Generosity:</label>
+    <input type="number" id="generosity" step="0.1" value="0.2" class="form-input"><br>
+
+    <label for="corruption" class="form-label">Perceptions of corruption:</label>
+    <input type="number" id="corruption" step="0.1" value="0.5" class="form-input"><br>
+
+    <label for="positive_affect" class="form-label">Positive affect:</label>
+    <input type="number" id="positive_affect" step="0.1" value="0.7" class="form-input"><br>
+
+    <label for="negative_affect" class="form-label">Negative affect:</label>
+    <input type="number" id="negative_affect" step="0.1" value="0.2" class="form-input"><br>
+
+    <button onclick="predictHappiness()" class="btn">Predict Happiness Score</button>
+  </div>
+  <p id="prediction_result" class="result-text">Predicted Happiness Score: </p>
+</div>
 
 ```
 
-### World Map
+
+## World Map
 
 ```{r}
 # Create bins for the scores with 0.5 intervals
@@ -401,7 +424,7 @@ ggplot() +
   coord_sf(crs = "+proj=robin")
 ```
 
-### Distribution Chart of Scores
+## Distribution Chart of Scores
 
 ```{r}
 ggplot(df_combined, aes(x = score)) +
@@ -453,7 +476,6 @@ The distribution of happiness scores is approximately normal with a slight posit
 These methods aim to create an improved, interactive visualization of global happiness levels, offering better insights and user engagement.
 :::
 
-# Findings
 
 ## New World Map
 
