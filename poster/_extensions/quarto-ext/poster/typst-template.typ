@@ -1,4 +1,3 @@
-
 #let poster(
   // The poster's size.
   size: "'36x24' or '48x36''",

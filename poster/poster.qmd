@@ -5,15 +5,15 @@ format:
     size: "36x24"
     poster-authors: "Toh Shao Ern, Kuick Si Qi, Wong Khin Foong, Sebestian Fernandez, Yu Haotong"
     departments: "Group 12"
-    univ-logo-scale: "50"
+    univ-logo-scale: "40"
     num-columns: "3"
     institution-logo: "./images/SIT-Logo.png"
     footer-text: "Prepared for Dr Hua, By Group 12"
     footer-url: "https://singaporetech.edu.sg"
     footer-emails: "sit@singaporetech.edu.sg"
     footer-color: "ebcfb2"
-    keywords: ["Happiness Index", "Typst", "Quarto"]
 ---
+
 
 ```{r setup, include=FALSE}
 # Set a CRAN mirror
@@ -133,52 +133,42 @@ The Life Ladder score, also known as the World Happiness Score, is derived from 
 | Perceptions of Corruption | Perceived corruption in government and business. |
 | Positive and Negative Affect | Average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
 
-The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country. The formula for the World Happiness Score can be represented as follows:
-
-$$
-\begin{equation}
-\begin{aligned}
-\text{Happiness Score} = & \ \beta_0 + \beta_1 \times (\text{Log GDP per capita}) \\
-& + \beta_2 \times (\text{Social Support}) + \beta_3 \times (\text{Healthy Life Expectancy}) \\
-& + \beta_4 \times (\text{Freedom to Make Life Choices}) + \beta_5 \times (\text{Generosity}) \\
-& + \beta_6 \times (\text{Perceptions of Corruption}) + \beta_7 \times (\text{Positive Affect}) - \beta_8 \times (\text{Negative Affect}) \\
-\end{aligned}
-\end{equation}
-$$
-
-Where $\beta_0$ to $\beta_8$ are coefficients derived from regression analysis based on historical data.
+The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country.
 
 ## Visualcapitalist's Global Happiness Levels Report
 
-The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)). The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
 
-::: {#fig-Visualcapitalist-map layout-ncol=2}
+::: {#fig-Visualcapitalist-map layout-ncol=2 layout-nrow=2}
 
 ![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){width="60%" #fig-1}
 
-![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){width="60%" #fig-2}
+![Inconsistent Labeling example](Images/inconsistent_labeling_weakness.png){width="60%" #fig-3}
 
 Visualcapitalist Global Happiness Levels Report
 
 :::
 
+\
+
+![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){width="60%" fig-align="center" #fig-4}
+
+\
+
 # Methods
 
 ## Data Understanding and Cleaning
 
-![Data Prep Pipeline](images/data_prep_pipeline.png)
+![Data Prep Pipeline](images/data_prep_pipeline.png){width="60%"}
 
-## Data Visualization
-
-### Create violin plot
+## Create violin plot
 
 ```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
-# Create the violin plot with boxplots
-base_plot <- ggplot(df_combined, aes(y = `World Region according to the World Bank`, x = score, fill = `World Region according to the World Bank`)) +
-  geom_violin(trim = TRUE) +  # Create horizontal violin plots
+# Base plot
+base_plot <- ggplot(df_combined, aes(y = `World Region according to the World Bank`, x = score)) +
+  geom_violin(trim = TRUE, fill = "lightblue") +  # Create horizontal violin plots with single color
   geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
   scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +  # Set the x-axis limits and breaks
-  scale_fill_viridis(discrete = TRUE, guide = FALSE) +  # Use viridis color scale for discrete data and remove legend
   labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
   theme_minimal() +  # Use a minimal theme
   theme(
@@ -192,10 +182,9 @@ highlight_data <- df_combined %>%
 
 # Add the highlighted points and text labels to the base plot
 final_plot <- base_plot +
-  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, color = score), size = 3) +
+  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score), size = 3, color = "darkred") +  # Single color for points
   geom_text_repel(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, label = country),
                   nudge_x = ifelse(highlight_data$score >= mean(highlight_data$score), 1, -1), nudge_y = 0.3, direction = "y") +
-  scale_color_viridis_c(option = "plasma", na.value = "grey90") +
   labs(title = "Happiness Scores by World Region (2021-2023)\nwith Top and Bottom Countries Highlighted")
 
 # Print the final plot
@@ -203,7 +192,7 @@ print(final_plot)
 
 ```
 
-### World Map
+## World Map
 
 ```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
 # Create bins for the scores with 0.5 intervals
@@ -250,7 +239,7 @@ world_plot <- ggplot() +
 print(world_plot)
 ```
 
-### Distribution Chart of Scores
+## Distribution Chart of Scores
 
 ```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
 ggplot(df_combined, aes(x = score)) +
