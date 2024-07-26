@@ -31,9 +31,7 @@ if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
 if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
 if (!require("grid")) install.packages("grid", dependencies = TRUE)
 if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
-if (!require("shiny")) install.packages("shiny", dependencies = TRUE)
 
-library(shiny)
 library(scales)
 library(readxl)
 library(dplyr)
@@ -121,59 +119,10 @@ df_combined$`World Region according to the World Bank`[which(df_combined$`World 
 df_combined$`World Region according to the World Bank`[which(df_combined$`World Region according to the World Bank` == "Latin America and Caribbean")] <- "Americas"
 ```
 
-
-# Introduction
-
-## Global Happiness Score
-
-The Life Ladder score, also known as the World Happiness Score, is derived from the Gallup World Poll data. The score is typically calculated based on several key variables that reflect the well-being and quality of life in different countries. Here’s a general outline of the formula and components involved in calculating the World Happiness Score:
-
-| **Component** | **Description** |
-|---------------|-----------------|
-| Life Evaluations (Ladder Question) | Respondents rate their current life from 0 (worst) to 10 (best). |
-| GDP per Capita | Natural logarithm of GDP per capita (PPP terms). |
-| Social Support | Binary response to: "Do you have relatives or friends you can count on for help if needed?" |
-| Healthy Life Expectancy | Life expectancy at birth.|
-| Freedom to Make Life Choices | Binary response to: "Are you satisfied with your freedom to choose what you do with your life?" |
-| Generosity | Donations to charity in the past month, adjusted for GDP per capita |
-| Perceptions of Corruption | Perceived corruption in government and business. |
-| Positive and Negative Affect | Average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
-
-The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country. The formula for the World Happiness Score can be represented as follows:
-
-$$
-\begin{equation}
-\begin{aligned}
-\text{Happiness Score} = & \ \beta_0 + \beta_1 \times (\text{Log GDP per capita}) \\
-& + \beta_2 \times (\text{Social Support}) + \beta_3 \times (\text{Healthy Life Expectancy}) \\
-& + \beta_4 \times (\text{Freedom to Make Life Choices}) + \beta_5 \times (\text{Generosity}) \\
-& + \beta_6 \times (\text{Perceptions of Corruption}) + \beta_7 \times (\text{Positive Affect}) - \beta_8 \times (\text{Negative Affect}) \\
-\end{aligned}
-\end{equation}
-$$
-
-Where $\beta_0$ to $\beta_8$ are coefficients derived from regression analysis based on historical data.
-
-## Visualcapitalist's Global Happiness Levels Report
-
-The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report**. The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
-
-::: {#fig-Visualcapitalist-map layout-ncol="2"}
-![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){#fig-1 width="75%"}
-
-![Map of Happiness Levels of East Asia + Oceania in 2024](images/OC_Happiness_East-Asia-Oceania_820.png){#fig-2 width="75%"}
-
-Visualcapitalist Global Happiness Levels Report
-:::
-
-# Methods
-
-## Data Sources
-
-World Happiness Report (WHR) 2021-2023: Contains happiness scores and key variables for countries worldwide. Gallup World Poll (GWP): Provides self-reported happiness evaluations on a scale from 0 to 10.
+# Interactive Exploration of Global Happiness Index
 
 ## Interactive Globe
-```{r}
+```{r, echo=FALSE, warning=FALSE}
 # create the bin globe with time slider using plotly in R using plot_geo and represent using plasma color scale
 df_combined %>%
   plot_geo(
@@ -236,7 +185,7 @@ The happiness score will be predicted based on the following variables: GDP per 
 
 ### Precompute Model Coefficients in R
 
-```{r}
+```{r, echo=FALSE, warning=FALSE}
 # Load the data
 df_happiness <- read_excel("data/DataForTable2.1.xls")
 
@@ -249,7 +198,12 @@ colnames(df_happiness) <- c("country", "year", "score", "gdp_per_capita", "socia
 model <- lm(score ~ gdp_per_capita + social_support + healthy_life_expectancy + freedom_to_make_life_choices + generosity + perceptions_of_corruption + positive_affect + negative_affect, data = df_happiness)
 
 coefficients <- coef(model)
-coefficients
+
+# Create a data frame for the coefficients
+
+data.frame(
+  Coefficient = coefficients
+) %>% kable(caption = "Model Coefficients")
 ```
 
 ### Try Out
@@ -377,170 +331,3 @@ coefficients
 </div>
 
 ```
-
-
-## World Map
-
-```{r}
-# Create bins for the scores with 0.5 intervals
-bins <- seq(0, 10, by = 0.5)
-labels <- paste0(bins[-length(bins)], "-", bins[-1])
-df_combined <- df_combined %>%
-  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
-
-# Check for any remaining missing values
-missing_scores <- df_combined %>% filter(is.na(score))
-if (nrow(missing_scores) > 0) {
-  warning("There are still countries with missing scores.")
-}
-
-# Inspect the data for missing scores
-# print(missing_scores)
-
-# Get world data
-world <- ne_countries(scale = "small", returnclass = "sf")
-
-# Compute the average score for each country over the years
-df_avg <- df_combined %>%
-  group_by(country_code) %>%
-  summarize(avg_score = mean(score, na.rm = TRUE))
-
-# Merge world data with the average scores
-world_data_avg <- left_join(world, df_avg, by = c("iso_a3" = "country_code"))
-
-# Check for missing data after the join
-missing_world_avg <- world_data_avg %>% filter(is.na(avg_score))
-
-# print(missing_world_avg)
-
-# Plot the average data
-ggplot() +
-  geom_sf(data = world_data_avg, aes(fill = avg_score), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Average Score") +
-  theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - Average (2021-2023)", fill = "Average Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
-```
-
-## Distribution Chart of Scores
-
-```{r}
-ggplot(df_combined, aes(x = score)) +
-  geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
-  geom_density(aes(y = 0.5 * ..count..), color = "red", size = 1, linetype = "dotted") +
-  stat_bin(binwidth = 0.5, geom = "text", aes(label = ifelse(..count.. > 0, ..count.., "")), vjust = -0.5, color = "black", position = position_stack(vjust = 1.0)) +
-  scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +
-  scale_y_continuous(limits = c(0, 100)) +
-  labs(title = "Distribution of Happiness Scores (2021-2023)",
-       x = "Happiness Score",
-       y = "Count") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
-
-```
-
-Overall:
-
-The distribution suggests that while there is a central tendency around a happiness score of 6, there is considerable variability in happiness scores among countries, with more countries experiencing moderate to low levels of happiness.
-
-Distribution Shape:
-
-The distribution of happiness scores is approximately normal with a slight positive skew. This means most countries have happiness scores clustered around the middle range (4 to 6), but there are more countries with lower scores than higher scores.
-
-## Critical Assessment and Proposed Improvements
-
-::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
-1.  Interactive Data Visualization:
-
--   Implement hover-over information for detailed country data.
--   Add filtering and sorting capabilities.
--   Include historical comparison using a time slider.
-
-2.  Consistent Labeling and Annotations:
-
--   Standardize labeling format for readability.
--   Provide annotations explaining key variables influencing happiness.
-
-3.  Accessible Design:
-
--   Ensure a user-friendly interface.
--   Use color schemes accessible to color-blind users.
-
-4.  Data Insights and Analysis:
-
--   Provide summaries and comparisons with relevant metrics.
--   Enhance linear scale visualization for regional comparisons.
-
-These methods aim to create an improved, interactive visualization of global happiness levels, offering better insights and user engagement.
-:::
-
-
-## New World Map
-
-## Happiness Score By World Region
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri.
-
-1.  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-2.  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-3.  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut.
-
-| Lorem ipsum dolor sit. | Lorem ipsum. | Lorem ipsum. |
-|------------------------|--------------|--------------|
-| Lorem ipsum dolor.     | Lorem ipsum. | $\alpha$     |
-| Lorem ipsum.           | Lorem ipsum. | $\beta$      |
-| Lorem.                 | Lorem.       | $\gamma$     |
-| Lorem ipsum dolor.     | Lorem.       | $\theta$     |
-
-: Lorem ipsum dolor sit amet {#tbl-1}
-
-Lorem @tbl-1 ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
-
-## Lorem ipsum dolor sit amet
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre.
-
-![Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.](./images/Standard_lettering.png){width="100%"}
-
-# Findings
-
-::: {.block fill="luma(230)" inset="8pt" radius="4pt"}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplifi- carique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et.
-
--   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
--   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
--   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-:::
-
-## Lorem ipsum etiam
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur.
-
-# Conclusion
-
-Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur.
-
-![Temperature and ozone level](images/fig-airquality-1.svg)
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
-
--   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
-    -   Lorem ipsum dolor sit amet.
-    -   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
--   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
-    -   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed.
-    -   Lorem ipsum dolor sit amet, consectetur adipiscing.
-
-$$
-\sum_(k=1)^n k = \frac{(n(n+1))}{2} = \frac{(n^2 + n)}{2}
-$$
-
-# Acknowledgement
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim aeque doleamus animo, cum corpore dolemus, fieri tamen permagna accessio potest, si aliquod aeternum et infinitum impendere malum nobis opinemur. Quod idem licet transferre in voluptatem, ut postea variari voluptas distinguique possit, augeri amplificarique non possit. At etiam Athenis, ut e patre audiebam facete et urbane Stoicos irridente, statua est in quo a nobis philosophia defensa et collaudata est, cum id, quod maxime placeat, facere possimus, omnis voluptas assumenda est, om- nis dolor repellendus. Temporibus autem quibusdam et.
