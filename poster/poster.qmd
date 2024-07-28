@@ -30,7 +30,11 @@ if (!require("viridis")) install.packages("viridis", dependencies = TRUE)
 if (!require("gridExtra")) install.packages("gridExtra", dependencies = TRUE)
 if (!require("grid")) install.packages("grid", dependencies = TRUE)
 if (!require("ggplot2")) install.packages("ggplot2", dependencies = TRUE)
+if (!require("Cairo")) install.packages("Cairo", dependencies = TRUE)
+if (!require("tmap")) install.packages("tmap", dependencies = TRUE)
+if (!require("ggimage")) install.packages("ggimage", dependencies = TRUE)
 
+library(ggimage)
 library(scales)
 library(readxl)
 library(dplyr)
@@ -45,6 +49,8 @@ library(viridis) # color palettes for "ggplot2")
 library(gridExtra) # arrange multiple grid-based plots on a page
 library(grid) # grid graphics system for R
 library(ggplot2) # create elegant data visualizations using the Grammar of Graphics
+library(Cairo)
+knitr::opts_chunk$set(dev = 'CairoPNG')
 ```
 
 ```{r, include=FALSE, warning=FALSE}
@@ -135,7 +141,7 @@ The Life Ladder score, also known as the World Happiness Score, is derived from 
 
 The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country.
 
-## Visualcapitalist's Global Happiness Levels Report
+## Visualcapitalist's Global Happiness Levels Previous Visualisation
 
 The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)). The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
 
@@ -153,27 +159,37 @@ Visualcapitalist Global Happiness Levels Report
 
 ![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){width="60%" fig-align="center" #fig-4}
 
-\
-
 # Methods
 
 ## Data Understanding and Cleaning
 
-![Data Prep Pipeline](images/data_prep_pipeline.png){width="60%"}
+![Data Prep Pipeline](images/data_prep_pipeline.png){width="40%"}
 
 ## Create violin plot
 
-```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
+```{r, fig.width=8, fig.align='center', echo=FALSE, warning=FALSE}
+# Calculate mean score for each region and sort regions by mean score in ascending order
+region_order <- df_combined %>%
+  group_by(`World Region according to the World Bank`) %>%
+  summarize(mean_score = mean(score, na.rm = TRUE)) %>%
+  arrange(mean_score) %>%
+  pull(`World Region according to the World Bank`)
+
+# Convert the 'World Region according to the World Bank' column to a factor with the sorted order
+df_combined$`World Region according to the World Bank` <- factor(df_combined$`World Region according to the World Bank`, levels = region_order)
+
 # Base plot
 base_plot <- ggplot(df_combined, aes(y = `World Region according to the World Bank`, x = score)) +
   geom_violin(trim = TRUE, fill = "lightblue") +  # Create horizontal violin plots with single color
   geom_boxplot(width = 0.1, fill = "white", color = "black", orientation = "y") +  # Overlay boxplots on the violins horizontally
   scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +  # Set the x-axis limits and breaks
-  labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score") +
+  labs(title = "Happiness Scores by World Region (2021-2023)", y = "World Region", x = "Happiness Score", caption = "Source: World Happiness Report (2021-2023)")+
   theme_minimal() +  # Use a minimal theme
   theme(
-    plot.title = element_text(hjust = 0.5)  # Center the plot title
-  )
+    plot.title = element_text(hjust = 0.5),  # Center the plot title
+    plot.caption = element_text(hjust = 1),  # Right-align the caption
+    plot.margin = margin(t = 10, r = 10, b = 40, l = 10)
+  ) 
 
 # Highlight the top and bottom of each region with text labels of the respective country
 highlight_data <- df_combined %>%
@@ -182,78 +198,73 @@ highlight_data <- df_combined %>%
 
 # Add the highlighted points and text labels to the base plot
 final_plot <- base_plot +
-  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score), size = 3, color = "darkred") +  # Single color for points
+  geom_point(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score), size = 2, color = "darkred") +  # Single color for points
   geom_text_repel(data = highlight_data, aes(y = `World Region according to the World Bank`, x = score, label = country),
-                  nudge_x = ifelse(highlight_data$score >= mean(highlight_data$score), 1, -1), nudge_y = 0.3, direction = "y") +
-  labs(title = "Happiness Scores by World Region (2021-2023)\nwith Top and Bottom Countries Highlighted")
+                  nudge_y = 0.4, direction = "y")
 
 # Print the final plot
 print(final_plot)
+grid.text("Figure 4: Violin Plot of Average Happiness Levels by World Region (2021-2023)", x = unit(0.5, "npc"), y = unit(0.05, "npc"), gp = gpar(fontsize = 12), just = "center")
 
 ```
 
 ## World Map
 
 ```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
-# Create bins for the scores with 0.5 intervals
-bins <- seq(0, 10, by = 0.5)
+# Create bins for the mean scores with 1.0 intervals
+bins <- seq(0, 10, by = 1)
 labels <- paste0(bins[-length(bins)], "-", bins[-1])
-df_combined <- df_combined %>%
-  mutate(score_bin = cut(score, breaks = bins, labels = labels, include.lowest = TRUE, right = FALSE))
-
-# Check for any remaining missing values
-missing_scores <- df_combined %>% filter(is.na(score))
-if (nrow(missing_scores) > 0) {
-  warning("There are still countries with missing scores.")
-}
-
-# Inspect the data for missing scores
-# print(missing_scores)
 
 # Get world data
 world <- ne_countries(scale = "small", returnclass = "sf")
 
-# Compute the average score for each country over the years
-df_avg <- df_combined %>%
-  group_by(country_code) %>%
-  summarize(avg_score = mean(score, na.rm = TRUE))
+# Merge world data with df_combined based on the country codes
+world_data <- world %>%
+  left_join(df_combined %>% distinct(country_code, mean_score), by = c("iso_a3" = "country_code"))
 
-# Merge world data with the average scores
-world_data_avg <- left_join(world, df_avg, by = c("iso_a3" = "country_code"))
-
-# Check for missing data after the join
-missing_world_avg <- world_data_avg %>% filter(is.na(avg_score))
-
-# print(missing_world_avg)
-
-# Plot the average data
+# Plot the average data using mean_score
 world_plot <- ggplot() +
-  geom_sf(data = world_data_avg, aes(fill = avg_score), color = "black") +
-  scale_fill_viridis_c(option = "plasma", na.value = "grey90", name = "Average Score") +
+  geom_sf(data = world_data, aes(fill = cut(mean_score, breaks = bins, labels = labels, include.lowest = TRUE)), color = "black") +
+  scale_fill_viridis_d(option = "plasma", na.value = "grey90", name = "Happiness Score") +
   theme_minimal() +
-  theme(legend.position = "bottom") +
-  labs(title = "World Map of Happiness - Average (2021-2023)", fill = "Average Score") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  coord_sf(crs = "+proj=robin")
+  labs(title = "World Map of Happiness - Average (2021-2023)", fill = "Happiness Score", , caption = "Source: World Happiness Report (2021-2023)") +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold"),
+    legend.title = element_text(face = "bold"),
+    legend.position = "right",
+    legend.key = element_rect(size = 0.5, colour = "grey"),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    plot.caption = element_text(hjust = 1, vjust= 0.5),
+    plot.margin = margin(t = 10, r = 10, b = 30, l = 10)
+  ) +
+  guides(fill = guide_legend(reverse = TRUE, title.position = "top", label.position = "right")) +
+  coord_sf(crs = "+proj=eqearth")
 
 print(world_plot)
+grid.text("Figure 5: World Map of Average Happiness Levels (2021-2023)", x = unit(0.5, "npc"), y = unit(0.05, "npc"), gp = gpar(fontsize = 12), just = "center")
 ```
 
 ## Distribution Chart of Scores
 
-```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
+```{r, fig.width=8, fig.height = 2.5, fig.align='center', echo=FALSE, warning=FALSE}
 ggplot(df_combined, aes(x = score)) +
   geom_histogram(binwidth = 0.5, fill = "skyblue", color = "black") +
-  geom_density(aes(y = 0.5 * ..count..), color = "red", size = 1, linetype = "dotted") +
+  geom_density(aes(y = 0.5 * ..count.. + 5), color = "red", size = 2, linetype= "dotted") +
   stat_bin(binwidth = 0.5, geom = "text", aes(label = ifelse(..count.. > 0, ..count.., "")), vjust = -0.5, color = "black", position = position_stack(vjust = 1.0)) +
   scale_x_continuous(limits = c(0, 10), breaks = seq(0, 10, by = 1)) +
   scale_y_continuous(limits = c(0, 100)) +
   labs(title = "Distribution of Happiness Scores (2021-2023)",
        x = "Happiness Score",
-       y = "Count") +
+       y = "Count", 
+       caption = "Source: World Happiness Report (2021-2023)") +
   theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    plot.margin = margin(t = 10, r = 10, b = 30, l = 10))
 
+grid.text("Figure 6: Distribution Historgram of Average Happiness Levels (2021-2023)", x = unit(0.5, "npc"), y = unit(0.05, "npc"), gp = gpar(fontsize = 12), just = "center")
 ```
 
 # Findings
