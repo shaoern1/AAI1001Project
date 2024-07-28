@@ -163,7 +163,7 @@ Visualcapitalist Global Happiness Levels Report
 
 ## Data Understanding and Cleaning
 
-![Data Prep Pipeline](images/data_prep_pipeline.png){width="40%"}
+![Data Prep Pipeline](images/data_prep_pipeline.png){width="100%"}
 
 ## Create violin plot
 
