@@ -49,7 +49,6 @@ library(grid) # grid graphics system for R
 library(ggplot2) # create elegant data visualizations using the Grammar of Graphics
 ```
 
-
 ```{r, include=FALSE}
 df <- read_excel("data/DataForTable2.1.xls")
 data(World)
@@ -122,6 +121,7 @@ df_combined$`World Region according to the World Bank`[which(df_combined$`World 
 # Interactive Exploration of Global Happiness Index
 
 ## Interactive Globe
+
 ```{r, echo=FALSE, warning=FALSE}
 # create the bin globe with time slider using plotly in R using plot_geo and represent using plasma color scale
 df_combined %>%
@@ -179,7 +179,7 @@ df_combined %>%
   )
 ```
 
-## Pridiction of Happiness Score
+## Prediction of Happiness Score
 
 The happiness score will be predicted based on the following variables: GDP per Capita, Social Support, Healthy Life Expectancy, Freedom to Make Life Choices, Generosity, Perceptions of Corruption, Positive Affect, and Negative Affect. The prediction will be based on a regression model using historical data from the World Happiness Report.
 
@@ -207,6 +207,7 @@ data.frame(
 ```
 
 ### Try Out
+
 ```{=html}
 <style>
   .container {
@@ -329,5 +330,4 @@ data.frame(
   </div>
   <p id="prediction_result" class="result-text">Predicted Happiness Score: </p>
 </div>
-
 ```

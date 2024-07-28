@@ -268,10 +268,31 @@ grid.text("Figure 6: Distribution Historgram of Average Happiness Levels (2021-2
 ```
 
 # Findings
+Based on our analysis of the Global Happiness Index, we derived several key insights:
+
+## Regional Variations in Happiness
+
+- The violin plot (Figure 4) highlights significant variations in happiness scores across different world regions from 2021 to 2023. Regions such as Europe and Central Asia show higher average happiness scores compared to regions like Sub-Saharan Africa and South Asia.
+- The spread of happiness scores within regions also varies, with some regions displaying a wider range of scores, indicating greater disparity in happiness levels among countries in those regions.
+
+## Geographical Distribution of Happiness
+
+- The world map (Figure 5) visually represents the average happiness scores for different countries. Countries in Northern Europe, such as Finland and Denmark, are among the happiest, while countries in regions like Sub-Saharan Africa and South Asia tend to have lower happiness scores.
+- The map helps to quickly identify areas of high and low happiness, showing a clear geographical trend.
+
+## Distribution of Happiness Scores
+
+- The histogram (Figure 6) shows the distribution of happiness scores for 2021-2023. The majority of countries have happiness scores between 4 and 6, with a smaller number of countries scoring above 7 or below 3.
+- This distribution suggests that while there are a few very happy and very unhappy countries, most countries fall within a moderate range of happiness.
+
+## Factors Contributing to Happiness
+
+- The table in the Introduction section outlines various components contributing to the Global Happiness Score, such as GDP per capita, social support, healthy life expectancy, and freedom to make life choices. These factors collectively influence the happiness levels in different countries.
+- Regions with higher scores in these components tend to have higher overall happiness scores, indicating the importance of these factors in achieving happiness.
 
 
 # Conclusion
-
+Our study on the Global Happiness Index reveals distinct regional and geographical patterns in happiness levels across the world. Northern European countries consistently rank among the happiest, while regions like Sub-Saharan Africa and South Asia face greater challenges in achieving higher happiness scores. The analysis underscores the importance of economic, social, and health-related factors in determining happiness levels. Policymakers and stakeholders can use these insights to develop targeted interventions aimed at improving the well-being and happiness of populations, particularly in regions with lower scores. The visualizations provide a clear and comprehensive understanding of global happiness trends, highlighting areas of strength and areas needing improvement.
 
 # Acknowledgement
 
