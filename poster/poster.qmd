@@ -14,7 +14,6 @@ format:
     footer-color: "ebcfb2"
 ---
 
-
 ```{r setup, include=FALSE}
 # Set a CRAN mirror
 options(repos = c(CRAN = "https://cloud.r-project.org"))
@@ -128,44 +127,49 @@ df_combined$`World Region according to the World Bank`[which(df_combined$`World 
 
 The Life Ladder score, also known as the World Happiness Score, is derived from the Gallup World Poll data. The score is typically calculated based on several key variables that reflect the well-being and quality of life in different countries. Here’s a general outline of the formula and components involved in calculating the World Happiness Score:
 
-| **Component** | **Description** |
-|---------------|-----------------|
-| Life Evaluations (Ladder Question) | Respondents rate their current life from 0 (worst) to 10 (best). |
-| GDP per Capita | Natural logarithm of GDP per capita (PPP terms). |
-| Social Support | Binary response to: "Do you have relatives or friends you can count on for help if needed?" |
-| Healthy Life Expectancy | Life expectancy at birth.|
-| Freedom to Make Life Choices | Binary response to: "Are you satisfied with your freedom to choose what you do with your life?" |
-| Generosity | Donations to charity in the past month, adjusted for GDP per capita |
-| Perceptions of Corruption | Perceived corruption in government and business. |
-| Positive and Negative Affect | Average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
+| **Component**                      | **Description**                                                                                                                            |
+|----------------------------------|--------------------------------------|
+| Life Evaluations (Ladder Question) | Respondents rate their current life from 0 (worst) to 10 (best).                                                                           |
+| GDP per Capita                     | Natural logarithm of GDP per capita (PPP terms).                                                                                           |
+| Social Support                     | Binary response to: "Do you have relatives or friends you can count on for help if needed?"                                                |
+| Healthy Life Expectancy            | Life expectancy at birth.                                                                                                                  |
+| Freedom to Make Life Choices       | Binary response to: "Are you satisfied with your freedom to choose what you do with your life?"                                            |
+| Generosity                         | Donations to charity in the past month, adjusted for GDP per capita                                                                        |
+| Perceptions of Corruption          | Perceived corruption in government and business.                                                                                           |
+| Positive and Negative Affect       | Average responses to questions about recent experiences of positive and negative emotions (e.g., laughter, enjoyment, sadness, and anger). |
 
 The World Happiness Score is calculated using a regression model that combines these variables to predict the happiness score for each country.
 
 ## Visualcapitalist's Global Happiness Levels Previous Visualisation
 
-The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)). The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through our critical analysis, we identified several strengths and weaknesses in the original visualization that we aim to improve as detailed below.
+The following @fig-Visualcapitalist-map from [Visualcapitalist](https://www.visualcapitalist.com/a-map-of-global-happiness-by-country-in-2024/) presents the global happiness levels in 2024, as reported in the **World Happiness Report** ([WHR](https://happiness-report.s3.amazonaws.com/2024/WHR+24.pdf)). The static world map provides a visual representation of the happiness scores across different countries, with the color gradient indicating the relative happiness levels. The visualization aims to highlight the disparities in happiness levels worldwide and the factors that contribute to these variations. However, through critical analysis, we intend to improve the original visualization by addressing the following weaknesses:
 
-::: {#fig-Visualcapitalist-map layout-ncol=2 layout-nrow=2}
+| **Weakness**                                               | **Recommendation**                                                              |
+|-----------------------------|-------------------------------------------|
+| Difficulty in differentiating happiness score due to color Fig 1(a) | Implement proper bins to improve differentiation of happiness scores            |
+| No way to find out distribution of happiness scores Fig 1(a)|Plot a histogram for average happiness levels from 2021-2023                    |
+| Ineffective representation of linear scale Fig 2| Plot a violin plot to show distribution and range of happiness scores by region |
 
-![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){width="60%" #fig-1}
+::: {#fig-Visualcapitalist-map layout-ncol="2" layout-nrow="2"}
+![Global Overview World map of Happiness Levels in 2024](images/OC-World-Happiness-Report-2024_Mar19.png){#fig-1 width="40%"}
 
-![Inconsistent Labeling example](Images/inconsistent_labeling_weakness.png){width="60%" #fig-3}
-
-Visualcapitalist Global Happiness Levels Report
-
-:::
+![Inconsistent Labeling example](Images/inconsistent_labeling_weakness.png){#fig-3 width="46%"}
 
 \
 
-![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){width="60%" fig-align="center" #fig-4}
+Visualcapitalist Global Happiness Levels Report
+:::
+![Linear scale of Happiness score of each country by region](images/linear_scale_of_happiness_region.png){#fig-4 width="50%" fig-align="center"}
+
+\ 
 
 # Methods
 
-## Data Understanding and Cleaning
+## Data Transformation Pipeline
 
-![Data Prep Pipeline](images/data_prep_pipeline.png){width="100%"}
+![Data Prep Pipeline](images/data_prep_pipeline.png){width="90%"}
 
-## Create violin plot
+## Violin plot to improve linear scale representation
 
 ```{r, fig.width=8, fig.align='center', echo=FALSE, warning=FALSE}
 # Calculate mean score for each region and sort regions by mean score in ascending order
@@ -208,7 +212,7 @@ grid.text("Figure 4: Violin Plot of Average Happiness Levels by World Region (20
 
 ```
 
-## World Map
+## World Map to improve color differentiation
 
 ```{r, fig.width=10, fig.align='center', echo=FALSE, warning=FALSE}
 # Create bins for the mean scores with 1.0 intervals
@@ -246,7 +250,7 @@ print(world_plot)
 grid.text("Figure 5: World Map of Average Happiness Levels (2021-2023)", x = unit(0.5, "npc"), y = unit(0.05, "npc"), gp = gpar(fontsize = 12), just = "center")
 ```
 
-## Distribution Chart of Scores
+## Histogram to show distribution of global happiness scores
 
 ```{r, fig.width=8, fig.height = 2.5, fig.align='center', echo=FALSE, warning=FALSE}
 ggplot(df_combined, aes(x = score)) +
@@ -267,32 +271,36 @@ ggplot(df_combined, aes(x = score)) +
 grid.text("Figure 6: Distribution Historgram of Average Happiness Levels (2021-2023)", x = unit(0.5, "npc"), y = unit(0.05, "npc"), gp = gpar(fontsize = 12), just = "center")
 ```
 
-# Findings
-Based on our analysis of the Global Happiness Index, we derived several key insights:
+# Improvements and Findings
+
 
 ## Regional Variations in Happiness
+To enhance our data visualisation, we have transitioned from a linear scale to a violin plot (Figure 4). This adaptation provides a more nuanced representation of happiness levels across region, addressing the limitations of the previous standalone linear scales, where country flags were densely clustered, preventing any meaningful interpretation.
 
-- The violin plot (Figure 4) highlights significant variations in happiness scores across different world regions from 2021 to 2023. Regions such as Europe and Central Asia show higher average happiness scores compared to regions like Sub-Saharan Africa and South Asia.
-- The spread of happiness scores within regions also varies, with some regions displaying a wider range of scores, indicating greater disparity in happiness levels among countries in those regions.
+\
 
-## Geographical Distribution of Happiness
+The violin plot, while not displaying individual country scores, offers several key advantages:
 
-- The world map (Figure 5) visually represents the average happiness scores for different countries. Countries in Northern Europe, such as Finland and Denmark, are among the happiest, while countries in regions like Sub-Saharan Africa and South Asia tend to have lower happiness scores.
-- The map helps to quickly identify areas of high and low happiness, showing a clear geographical trend.
+- Provides a comprehensive view of the distribution and range of happiness scores within each continent.
+- Facilitates a more profound understanding of happiness patterns and variations across geographical regions.
+- Enables viewers to discern meaningful trends and insights that were previously obscured. (eg: Mean, lowest & highest scores and distribution)
 
-## Distribution of Happiness Scores
+## Improved visualisation of World Map
+Previously the world map was difficult to interpret due to similarity of colors. To enhance this, we implemented bins and labels to improve the differentiation of happiness scores across countries. The new world map (Figure 5) provides a clearer and more intuitive representation of global happiness levels, allowing viewers to discern patterns and trends more effectively. The sharper color gradient now vividly reflects the distribution of happiness scores, enhancing the overall visual impact and analytical value of the map.
 
-- The histogram (Figure 6) shows the distribution of happiness scores for 2021-2023. The majority of countries have happiness scores between 4 and 6, with a smaller number of countries scoring above 7 or below 3.
-- This distribution suggests that while there are a few very happy and very unhappy countries, most countries fall within a moderate range of happiness.
+## Global Distribution of Happiness Scores
 
-## Factors Contributing to Happiness
+To address the challenge of effectively representing the distribution of happiness scores across countries, we have introduced a histogram (Figure 6) depicting the distribution of happiness scores for the years 2021-2023. This new visualisation offers several key benefits:
 
-- The table in the Introduction section outlines various components contributing to the Global Happiness Score, such as GDP per capita, social support, healthy life expectancy, and freedom to make life choices. These factors collectively influence the happiness levels in different countries.
-- Regions with higher scores in these components tend to have higher overall happiness scores, indicating the importance of these factors in achieving happiness.
+- Giving users a clear overview of the frequency and spread of happiness scores globally.
+- Incorporating a trend line to identify the left-skewed nature of the distribution, indicating that happiness scores tend to be above the midpoint of 5 on average.
+- Serving as a valuable complement to existing visualisations, offering a more granular perspective on the worldwide distribution of happiness levels.
+
+## Proposed Interactivity
 
 
 # Conclusion
-Our study on the Global Happiness Index reveals distinct regional and geographical patterns in happiness levels across the world. Northern European countries consistently rank among the happiest, while regions like Sub-Saharan Africa and South Asia face greater challenges in achieving higher happiness scores. The analysis underscores the importance of economic, social, and health-related factors in determining happiness levels. Policymakers and stakeholders can use these insights to develop targeted interventions aimed at improving the well-being and happiness of populations, particularly in regions with lower scores. The visualizations provide a clear and comprehensive understanding of global happiness trends, highlighting areas of strength and areas needing improvement.
 
-# Acknowledgement
+In conclusion, our enhanced data visualisation techniques have significantly improved the clarity, depth, and analytical value of the Global Happiness Index as compared to the VisualCapitalist. By addressing the limitations of the original visualisation, we have provided a more nuanced and insightful representation of happiness levels worldwide. The violin plot, world map, and histogram offer a comprehensive view of happiness scores, regional variations, and global distribution, enabling viewers to discern meaningful patterns and trends more effectively. These enhancements have transformed our data visualisation into a powerful tool for understanding and exploring the insights within the Global Happiness Index.
+
 
